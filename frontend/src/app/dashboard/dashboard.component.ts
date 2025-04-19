@@ -11,5 +11,5 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
-
+  title = 'Web Taxi';
 }
