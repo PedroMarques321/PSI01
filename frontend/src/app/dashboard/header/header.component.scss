@@ -1,0 +1,49 @@
+.anchored-row-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000; 
+    padding: 8px 16px;
+    height: 56px;
+  }
+
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+
+  /* -----------material search bar ------------*/
+
+.material-input {
+  width: 500px;
+}
+
+.material-input input {
+  padding: 1px 5px; /* Adjust the padding as needed */
+  font-size: 14px; /* Adjust the font size as needed */
+}
+
+.mat-form-field {
+  height: 100%; /* Adjust the height as needed */
+}
+
+.mat-form-field-wrapper {
+  height: 100%; /* Ensure the input wrapper fills the height of the mat-form-field */
+}
+
+::ng-deep .mat-form-field-appearance-outline:not(.mat-focused) .mat-form-field-outline {
+  border-color: #999; /* Change the default outline color to gray */
+}
+
+.form-bar {
+  transition: top 0.3s ease;
+  height: fit-content;
+  margin-top: auto;
+  margin-left: -175px;
+  top: -60px; /* Adjust to hide the form bar initially */
+  transition: top 0.3s ease; /* Add smooth transition effect */
+}
+
+.form-bar button {
+  margin-left: 50px;
+}
+/* ----------------------------------------------*/
