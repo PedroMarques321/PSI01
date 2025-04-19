@@ -69,32 +69,6 @@
   
 }
 
-/* -----------material search bar ------------*/
-.example-form {
-  min-width: 150px;
-  max-width: 500px;
-  width: 400px;
-}
-
-.example-full-width {
-  width: 100%;
-}
-.material-input {
-  width: 500px;
-  padding-top: 22px;
-  flex: 1;
-}
-
-.material-input .mat-form-field-wrapper {
-  background-color: #537d30 /* Change to your desired fill color */
-}
-
-.form-bar {
-  display: flex;
-  align-items: center;
-}
-/* ----------------------------------------------*/
-
 @media (max-width: 600px) {
   .frontcard {
     height: 80px; 
@@ -113,21 +87,15 @@
   height: 100%;
 
 }
-.website-component {
-  height: 200px;
-}
-
-.website-component h1 {
-  margin-top: 8%;
-  text-align: center;
-}
 
 /*------- body instructions text div -----------*/
-.body-instructions {
+.body-toolbar {
   height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .card-container {
@@ -163,22 +131,6 @@
   background-size: cover;
 }
 
-.card {
-  background-color: #263238; // Primary color
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white; // Text color
-  width: 250px;
-  gap: 15px;
-  height: 250px; 
-}
-
-.material-symbols-outlined {
-  margin-top: 125px;
-  color: #537d30;
-}
 /* BODY END */
 
 /* FOOTER START */
