@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HeaderComponent } from './dashboard/header/header.component';
+import { HttpClientModule } from '@angular/common/http';
+import { TaxisService } from './taxis.service';
 
 import { FormsModule } from '@angular/forms';
 
@@ -23,9 +25,10 @@ import { ManagementComponent } from './management/management.component';
     BrowserModule,
     AppRoutingModule,
     MaterialImports,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [TaxisService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

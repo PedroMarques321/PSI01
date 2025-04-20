@@ -17,4 +17,10 @@ const petcontroller = require("../controllers/petController");
 router.get("/pets", petcontroller.petsGetAll);
 router.get("/pet/:id", petcontroller.petGetId);
 
+const taxicontroller = require("../controllers/taxiController");
+
+//Taxi endpoints
+router.get("/taxis", taxicontroller.taxisGetAll);
+router.post("/taxi", taxicontroller.taxiCreate);
+
 module.exports = router;

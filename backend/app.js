@@ -16,6 +16,13 @@ var petRouter = require('./routes/pet');
 
 var app = express();
 
+const mongoose = require('mongoose');
+mongoose.connect("mongodb://localhost:27017/webtaxi").then(() => {
+  console.log("Ligado à base de dados MongoDB");
+}).catch((err) => {
+  console.error("Erro na ligação à base de dados:", err);
+});
+
 // CORS
 app.use(cors());
 
@@ -52,6 +59,11 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+// Iniciar o servidor
+app.listen(3000, () => {
+  console.log("Servidor a correr na porta 3000");
 });
 
 module.exports = app;
