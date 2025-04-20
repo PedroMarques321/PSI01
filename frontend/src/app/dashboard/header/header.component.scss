@@ -1,10 +1,14 @@
 .anchored-row-top {
-    position: fixed;
+    position: relative;
     top: 0;
     width: 100%;
     z-index: 1000; 
     padding: 8px 16px;
     height: 56px;
+    background-color: rgb(223, 176, 176);
+    border-top-right-radius: 30px;
+    border-top-left-radius: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   }
 
   .example-spacer {
