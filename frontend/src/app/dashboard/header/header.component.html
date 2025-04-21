@@ -1,7 +1,11 @@
 <mat-toolbar class="anchored-row-top" color="primary">
     <span><button mat-button routerLink="/dashboard">Home</button><span>| </span></span>
     <span>
-      <button mat-button routerLink="/dashboard/management">Management</button>
+      <button mat-button [matMenuTriggerFor]="menu">Management</button>
+      <mat-menu class="menu-options" #menu="matMenu">
+        <button mat-menu-item routerLink="/dashboard/management">Taxis</button>
+        <button mat-menu-item>Motoristas</button> <!--Preencher routerLink quando desenvolvido no Sprint2-->
+      </mat-menu>
     </span>
     <span class="example-spacer"></span>
     <button mat-icon-button class="example-icon" aria-hidden="false" aria-label="Example heart icon">

@@ -26,3 +26,10 @@ body {
 .mat-typography {
   background-color: rosybrown;
 }
+
+// Customizing Angular Material Menu with Options
+:root {
+  @include mat.menu-overrides((
+    item-hover-state-layer-color: pink,
+  ))
+}
