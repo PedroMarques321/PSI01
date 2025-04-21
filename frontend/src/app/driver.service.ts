@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Morotista } from './motorista';
+import { Motorista } from './motorista';
 
 @Injectable({
   providedIn: 'root'
@@ -27,11 +27,12 @@ export class DriverService {
           console.log('Drivers received:', motoristas);
           console.log('fetched drivers');
         }),
-        catchError(this.handleError<Driver[]>('getDrivers', []))
+        catchError(this.handleError<Motorista[]>('getDrivers', []))
       );
   }
 
   /** POST a new driver to the server */
+  /**
   postDriver(motorista: Motorista): Observable<Motorista> {
     console.log('postDriver called');
     return this.http.post<Driver>(this.postDriverUrl, motorista, this.httpOptions)
@@ -42,7 +43,7 @@ export class DriverService {
         catchError(this.handleError<Driver>('postDriver'))
       );
   }
-
+  */
   /** Tratamento de erro */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

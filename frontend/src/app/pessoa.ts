@@ -1,6 +1,6 @@
 export enum Genero {
-  Masculino = true,
-  Feminino = false
+  Masculino = "Masculino",
+  Feminino = "Femenino"
 }
 
 export interface Pessoa {

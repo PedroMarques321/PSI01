@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Taxi } from '../taxi';
+import { Motorista } from '../motorista';
 import { TaxisService } from '../taxis.service';
+import { DriverService } from '../driver.service';
 import * as Papa from 'papaparse';
 
 
@@ -28,6 +30,7 @@ export class ManagementComponent {
     matricula: 'AA-00-AA',
     ano_de_compra: new Date()
   };
+
   novoMotorista = {
     morada: {
       numero_porta: 0,
@@ -46,10 +49,11 @@ export class ManagementComponent {
 
 
   listaTaxis: Taxi[] = [];
+  listaDrivers: Motorista[] = [];
   loading = false;
   errorMessage = '';
 
-  constructor(private taxisService: TaxisService) {
+  constructor(private taxisService: TaxisService, private driverService: DriverService) {
     this.carregarCodigosPostais();
   }
 
@@ -153,6 +157,24 @@ export class ManagementComponent {
   }
 
   //MOTORISTAS---------------------------------------------
+
+  getDrivers(): void {
+      this.loading = true;
+      this.driverService.getDrivers()
+        .subscribe(
+          (motoristas: Motorista[]) => {
+            console.log('Drivers recebidos:', motoristas);
+            this.listaDrivers = motoristas;
+            this.loading = false;
+          },
+          (error: any) => {
+            this.errorMessage = 'Erro ao carregar drivers: ' + error.message;
+            this.loading = false;
+          }
+        );
+  }
+
+
   registarMotorista() {
     console.log('Motorista registado:', this.novoMotorista);
     this.novoMotorista = {
