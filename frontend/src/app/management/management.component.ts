@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
 import { Taxi } from '../taxi';
 import { TaxisService } from '../taxis.service';
+<<<<<<< Updated upstream
 import { Driver } from '../driver';
 import { DriverService } from '../driver.service';
+=======
+import * as Papa from 'papaparse';
+
+>>>>>>> Stashed changes
 
 @Component({
   selector: 'app-management',
@@ -14,8 +19,12 @@ export class ManagementComponent {
 
   marcasDisponiveis = ['Toyota', 'Mercedes', 'Volkswagen'];
   modelosDisponiveis = ['Prius', 'Classe E', 'Golf'];
+  codigosPostais: any[] = [];
 
+  mostrarFormulario: boolean = false;
+  mostrarFormularioMotorista = false;
   dataInvalida = true;
+
   novoTaxi: Taxi = {
     _id: null,
     modelo: 'Prius',
@@ -25,6 +34,7 @@ export class ManagementComponent {
     ano_de_compra: new Date()
   };
 
+<<<<<<< Updated upstream
   novoDriver: Driver = {
     _id: null,
     nome: '',
@@ -33,19 +43,42 @@ export class ManagementComponent {
     carta_de_conducao: '',
     codigo_postal: '',
     ano_de_nascimento: new Date()
+=======
+  novoMotorista = {
+    morada: {
+      numero_porta: 0,
+      rua: 'Rua de deus',
+      codigo_postal: '',
+      localidade: ''
+    },
+    carta_de_conducao: '',
+    nascimento: new Date(),
+    pessoa: {
+      nif: 123456789,
+      nome: 'João Silva',
+      genero: true
+    }
+>>>>>>> Stashed changes
   };
 
   listaTaxis: Taxi[] = [];
   listaDrivers: Driver[] = [];
   loading = false;
   errorMessage = '';
+<<<<<<< Updated upstream
   constructor(private taxisService: TaxisService, private driverService: DriverService) {}
+=======
+  constructor(private taxisService: TaxisService) {
+    this.carregarCodigosPostais();
+  }
+>>>>>>> Stashed changes
 
   ngOnInit(): void {
     this.getTaxis();
     this.getDrivers();
   }
 
+  //TAXIS-------------------------------------------------------
   getTaxis(): void {
     this.loading = true;
     this.taxisService.getTaxis()
@@ -69,7 +102,7 @@ export class ManagementComponent {
       return;
     }
 
-    if (this.validarData()) {
+    if (this.validarData(this.novoTaxi.ano_de_compra)) {
       console.log('Data inválida!');
       return;
     }
@@ -114,8 +147,8 @@ export class ManagementComponent {
     return regex.test(matricula);
   }
 
-  validarData() {
-    const dataInserida = new Date(this.novoTaxi.ano_de_compra);
+  validarData( data: Date ) {
+    const dataInserida = new Date(data);
     const dataAtual = new Date();
 
     return dataInserida > dataAtual;
@@ -140,6 +173,7 @@ export class ManagementComponent {
     };
   }
 
+<<<<<<< Updated upstream
   /** Drivers */
   getDrivers(): void {
     this.loading = true;
@@ -195,4 +229,96 @@ export class ManagementComponent {
         }
       );
     }
+=======
+  //MOTORISTAS---------------------------------------------
+  registarMotorista() {
+    console.log('Motorista registado:', this.novoMotorista);
+
+    // Aqui podes fazer as validações e o POST usando um service como fizeste com os táxis
+
+    // Limpar formulário
+    this.novoMotorista = {
+      morada: {
+        numero_porta: 0,
+        rua: '',
+        codigo_postal: '',
+        localidade: ''
+        },
+      carta_de_conducao: '',
+      nascimento: new Date(),
+      pessoa: {
+        nif: 0,
+        nome: 'nome',
+        genero: true
+      }
+    };
+
+    this.mostrarFormularioMotorista = false;
+  }
+
+  nifValido(): boolean {
+    // Verifica se contém apenas dígitos
+    return /^[0-9]+$/.test(String(this.novoMotorista.pessoa.nif));
+  }
+
+  nomeValido(): boolean {
+    // Verifica se contém apenas letras (com espaços permitidos)
+    return /^[A-Za-zÀ-ÿ\s]+$/.test(this.novoMotorista.pessoa.nome);
+  }
+
+  ruaValida(): boolean {
+    const ruaRegex = /^[A-Za-zÀ-ÿ\s]+$/;
+    return ruaRegex.test(this.novoMotorista.morada.rua);
+  }
+
+  portaValida(): boolean {
+    return !isNaN(this.novoMotorista.morada.numero_porta);
+  }
+
+  carregarCodigosPostais() {
+    const filePath = 'assets/codigos_postais.csv';
+
+    Papa.parse(filePath, {
+      download: true,
+      complete: (result : any) => {
+        this.codigosPostais = result.data;
+        console.log('Dados do CSV carregados:', this.codigosPostais);
+      },
+      header: true
+    });
+  }
+
+
+  onCodigoPostalChange() {
+    const codigoPostal = this.novoMotorista.morada.codigo_postal;
+
+    if (codigoPostal.length === 8) {
+      const [numCodPostal, extCodPostal] = codigoPostal.split("-");  // Divide o código postal por espaço.
+      console.log("Código Postal Inserido:", numCodPostal, extCodPostal);  // Verifique se o valor está correto.
+      this.buscarLocalidade(numCodPostal, extCodPostal);  // Chama a função de busca passando ambos os valores
+    } else {
+      this.novoMotorista.morada.localidade = '';
+    }
+  }
+
+  buscarLocalidade(numCodPostal: string, extCodPostal: string) {
+    console.log('Primeiro elemento do array:', this.codigosPostais[0]);
+
+    const num = numCodPostal.trim();
+    const ext = extCodPostal.trim();
+
+    // Encontrar a linha onde num_cod_postal e ext_cod_postal combinam com os valores inseridos.
+    const encontrado = this.codigosPostais.find(codigo =>
+      codigo.num_cod_postal == numCodPostal && codigo.ext_cod_postal == extCodPostal);
+
+    if (encontrado) {
+      this.novoMotorista.morada.localidade = encontrado.nome_localidade;
+    } else {
+      this.novoMotorista.morada.localidade = 'Código postal não encontrado';
+    }
+
+    console.log('Localidade encontrada:', this.novoMotorista.morada.localidade);  // Verifique o valor da localidade.
+  }
+>>>>>>> Stashed changes
 }
+
