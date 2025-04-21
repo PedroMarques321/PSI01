@@ -85,3 +85,45 @@
     {{ taxi.matricula }} - {{ taxi.marca }} {{ taxi.modelo }} ({{ formatarData(taxi.ano_de_compra) }}) - Conforto: {{ taxi.conforto }}
   </li>
 </ul>
+
+<!--Registar Condutor-->
+<h2 class="titulo">Registar Novo Condutor</h2>
+<form (ngSubmit)="registarDriver()" #formCondutor="ngForm">
+  <!-- Nome -->
+  <div>
+    <label for="nome">Nome:</label>
+    <input
+      type="text"
+      id="nome"
+      name="nome"
+      [(ngModel)]="novoDriver.nome"
+      required
+    />
+  </div>
+
+  <!-- NIF -->
+  <div>
+    <label for="nif">NIF:</label>
+    <input
+      type="text"
+      id="nif"
+      name="nif"
+      [(ngModel)]="novoDriver.nif"
+      required
+    />
+  </div>
+
+  <!-- Data de Nascimento -->
+  <div>
+    <label for="dataNascimento">Data de Nascimento:</label>
+    <input
+      type="date"
+      id="dataNascimento"
+      name="dataNascimento"
+      [(ngModel)]="novoDriver.ano_de_nascimento"
+      required
+    />
+  </div>
+
+  <!-- Botão Submeter -->
+  <button type="submit">Registar Condutor</button>
