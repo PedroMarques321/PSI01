@@ -1,4 +1,4 @@
-<h2>Registar Novo Táxi</h2>
+<h2 class="titulo">Registar Novo Táxi</h2>
 
 <form (ngSubmit)="registarTaxi()" #formTaxi="ngForm">
   <!-- Matrícula -->
@@ -85,4 +85,3 @@
     {{ taxi.matricula }} - {{ taxi.marca }} {{ taxi.modelo }} ({{ formatarData(taxi.ano_de_compra) }}) - Conforto: {{ taxi.conforto }}
   </li>
 </ul>
-
