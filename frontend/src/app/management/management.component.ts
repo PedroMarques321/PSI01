@@ -44,21 +44,6 @@ export class ManagementComponent {
     }
   };
 
-  novoMotorista = {
-    morada: {
-      numero_porta: 0,
-      rua: 'Rua de deus',
-      codigo_postal: '',
-      localidade: ''
-    },
-    carta_de_conducao: '',
-    nascimento: new Date(),
-    pessoa: {
-      nif: 123456789,
-      nome: 'João Silva',
-      genero: true
-    }
-  };
 
   listaTaxis: Taxi[] = [];
   loading = false;
