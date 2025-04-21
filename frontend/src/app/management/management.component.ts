@@ -1,13 +1,8 @@
 import { Component } from '@angular/core';
 import { Taxi } from '../taxi';
 import { TaxisService } from '../taxis.service';
-<<<<<<< Updated upstream
-import { Driver } from '../driver';
-import { DriverService } from '../driver.service';
-=======
 import * as Papa from 'papaparse';
 
->>>>>>> Stashed changes
 
 @Component({
   selector: 'app-management',
@@ -33,17 +28,6 @@ export class ManagementComponent {
     matricula: 'AA-00-AA',
     ano_de_compra: new Date()
   };
-
-<<<<<<< Updated upstream
-  novoDriver: Driver = {
-    _id: null,
-    nome: '',
-    genero: '',
-    nif: '',
-    carta_de_conducao: '',
-    codigo_postal: '',
-    ano_de_nascimento: new Date()
-=======
   novoMotorista = {
     morada: {
       numero_porta: 0,
@@ -58,24 +42,18 @@ export class ManagementComponent {
       nome: 'João Silva',
       genero: true
     }
->>>>>>> Stashed changes
   };
 
   listaTaxis: Taxi[] = [];
-  listaDrivers: Driver[] = [];
   loading = false;
   errorMessage = '';
-<<<<<<< Updated upstream
-  constructor(private taxisService: TaxisService, private driverService: DriverService) {}
-=======
+
   constructor(private taxisService: TaxisService) {
     this.carregarCodigosPostais();
   }
->>>>>>> Stashed changes
 
   ngOnInit(): void {
     this.getTaxis();
-    this.getDrivers();
   }
 
   //TAXIS-------------------------------------------------------
@@ -173,70 +151,10 @@ export class ManagementComponent {
     };
   }
 
-<<<<<<< Updated upstream
-  /** Drivers */
-  getDrivers(): void {
-    this.loading = true;
-    this.taxisService.getTaxis()
-      .subscribe(
-        (drivers: Taxi[]) => {
-          console.log('Drivers recebidos:', drivers);
-          this.listaTaxis = drivers;
-          this.loading = false;
-        },
-        (error: any) => {
-          this.errorMessage = 'Erro ao carregar drivers: ' + error.message;
-          this.loading = false;
-        }
-      );
-  }
-
-  registarDriver() {
-
-    if (this.validarData()) {
-      console.log('Data inválida!');
-      return;
-    }
-
-    this.formatarData(this.novoDriver.ano_de_nascimento);
-
-    // validacoes aqui
-    const driverRegistado = {
-      ...this.novoDriver,
-    };
-
-    // adiciona ao topo da lista
-    this.listaDrivers.unshift(driverRegistado);
-
-    this.registarDriverAux(driverRegistado);
-
-    this.limparTaxi();
-  }
-
-  registarDriverAux(driver: Driver): void {
-    this.loading = true;
-
-    this.driverService.postDriver(driver)
-      .subscribe(
-        (novoDriver: Driver) => {
-          console.log('Novo driver adicionado:', novoDriver);
-          this.listaDrivers.unshift(novoDriver);
-          this.loading = false;
-        },
-        (error: any) => {
-          this.errorMessage = 'Erro ao adicionar novo driver: ' + error.message;
-          this.loading = false;
-        }
-      );
-    }
-=======
   //MOTORISTAS---------------------------------------------
   registarMotorista() {
     console.log('Motorista registado:', this.novoMotorista);
 
-    // Aqui podes fazer as validações e o POST usando um service como fizeste com os táxis
-
-    // Limpar formulário
     this.novoMotorista = {
       morada: {
         numero_porta: 0,
@@ -319,6 +237,5 @@ export class ManagementComponent {
 
     console.log('Localidade encontrada:', this.novoMotorista.morada.localidade);  // Verifique o valor da localidade.
   }
->>>>>>> Stashed changes
 }
 

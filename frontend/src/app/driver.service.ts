@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Driver } from './driver';
+import { Morotista } from './motorista';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DriverService {
-  
+
   private allDriversUrl = 'http://localhost:3000/dashboard/drivers';
   private postDriverUrl = 'http://localhost:3000/dashboard/driver';
 
@@ -19,12 +19,12 @@ export class DriverService {
   constructor(private http: HttpClient) { }
 
   /** GET drivers from the server */
-  getDrivers(): Observable<Driver[]> {
+  getDrivers(): Observable<Motorista[]> {
     console.log('getDrivers called');
-    return this.http.get<Driver[]>(this.allDriversUrl)
+    return this.http.get<Motorista[]>(this.allDriversUrl)
       .pipe(
-        tap(drivers => {
-          console.log('Drivers received:', drivers);
+        tap(motoristas => {
+          console.log('Drivers received:', motoristas);
           console.log('fetched drivers');
         }),
         catchError(this.handleError<Driver[]>('getDrivers', []))
@@ -32,9 +32,9 @@ export class DriverService {
   }
 
   /** POST a new driver to the server */
-  postDriver(driver: Driver): Observable<Driver> {
+  postDriver(motorista: Motorista): Observable<Motorista> {
     console.log('postDriver called');
-    return this.http.post<Driver>(this.postDriverUrl, driver, this.httpOptions)
+    return this.http.post<Driver>(this.postDriverUrl, motorista, this.httpOptions)
       .pipe(
         tap(newDriver => {
           console.log('New driver added:', newDriver);
