@@ -1,5 +1,5 @@
 <!-- Botão para mostrar/esconder formulário -->
-<button (click)="mostrarFormulario = !mostrarFormulario">
+<button mat-button (click)="mostrarFormulario = !mostrarFormulario">
   {{ mostrarFormulario ? 'Cancelar' : 'Adicionar Novo Táxi' }}
 </button>
 
@@ -11,13 +11,16 @@
     <!-- Matrícula -->
     <div>
       <label for="matricula">Matrícula:</label>
-      <input
-        type="text"
-        id="matricula"
-        name="matricula"
-        [(ngModel)]="novoTaxi.matricula"
-        required
-      />
+      <mat-form-field class="matricula" appearance="outline">
+        <input
+          matInput
+          type="text"
+          id="matricula"
+          name="matricula"
+          [(ngModel)]="novoTaxi.matricula"
+          required
+        />
+      </mat-form-field>
     </div>
 
     <div *ngIf="!validarMatricula(novoTaxi.matricula)" style="color: red;">
@@ -79,7 +82,7 @@
   </li>
 </ul>
 
-<button (click)="mostrarFormularioMotorista = !mostrarFormularioMotorista">
+<button mat-button (click)="mostrarFormularioMotorista = !mostrarFormularioMotorista">
   {{ mostrarFormularioMotorista ? 'Cancelar' : 'Adicionar Novo Motorista' }}
 </button>
 

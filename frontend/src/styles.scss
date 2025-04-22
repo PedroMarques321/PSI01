@@ -28,8 +28,12 @@ body {
 }
 
 // Customizing Angular Material Menu with Options
+// Registar taxi Matricula, isto altera todos
 :root {
   @include mat.menu-overrides((
     item-hover-state-layer-color: pink,
-  ))
+  ));
+  @include mat.form-field-overrides((
+    container-height: 50px,
+  ));
 }
