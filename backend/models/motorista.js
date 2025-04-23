@@ -2,14 +2,16 @@ const mongoose = require('mongoose');
 
 const schema = mongoose.Schema;
 
-const pessoaSchema = require('./pessoa');
-const moradaSchema = require('./morada');
+const pessoaModel = require('./pessoa');
+const pessoaSchema = pessoaModel.schema;
+const moradaModel = require('./morada');
+const moradaSchema = moradaModel.schema;
 const morada = require('./morada');
 
 const motoristaSchema = new schema({
-    morada: { type: moradaSchema, required: true },
+    morada: moradaSchema,
     carta_de_conducao: { type: String, required: true, maxLength: 20 },
-    pessoa: { type: pessoaSchema, required: true },
+    pessoa: pessoaSchema,
     nascimento: { type: Date, required: true },
 });
 

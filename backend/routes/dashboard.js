@@ -26,7 +26,7 @@ router.post("/taxi", taxicontroller.taxiCreate);
 const drivercontroller = require("../controllers/driverController");
 
 //Driver endpoints
-router.get("/drivers", drivercontroller.driversGetAll);
+router.get("/drivers", drivercontroller.driverGetAll);
 router.post("/driver", drivercontroller.driverCreate);
 
 module.exports = router;

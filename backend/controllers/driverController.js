@@ -5,13 +5,14 @@ const asyncHandler = require('express-async-handler');
 
 // Criar motorista (POST /driver)
 exports.driverCreate = async (req, res) => {
-    try {
-      const novoMotorista = new Motorista(req.body);
-      const salvo = await novoMotorista.save();
-      res.status(201).json(salvo);
-    } catch (err) {
-      res.status(500).json({ erro: "Erro ao criar motorista." });
-    }
+  try {
+    const novoMotorista = new Motorista(req.body);
+    const salvo = await novoMotorista.save();
+    res.status(201).json(salvo);
+  } catch (err) {
+    console.error('Erro ao criar motorista:', err);  // Log do erro completo
+    res.status(500).json({ erro: "Erro ao criar motorista." });
+  }
   };
   
   // Listar todos os motoristas (GET /driver)
