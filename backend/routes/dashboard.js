@@ -23,4 +23,10 @@ const taxicontroller = require("../controllers/taxiController");
 router.get("/taxis", taxicontroller.taxisGetAll);
 router.post("/taxi", taxicontroller.taxiCreate);
 
+const drivercontroller = require("../controllers/driverController");
+
+//Driver endpoints
+router.get("/drivers", drivercontroller.driversGetAll);
+router.post("/driver", drivercontroller.driverCreate);
+
 module.exports = router;
