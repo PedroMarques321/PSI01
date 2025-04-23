@@ -32,18 +32,17 @@ export class DriverService {
   }
 
   /** POST a new driver to the server */
-  /**
   postDriver(motorista: Motorista): Observable<Motorista> {
     console.log('postDriver called');
-    return this.http.post<Driver>(this.postDriverUrl, motorista, this.httpOptions)
+    console.log(motorista);
+    return this.http.post<Motorista>(this.postDriverUrl, motorista, this.httpOptions)
       .pipe(
         tap(newDriver => {
           console.log('New driver added:', newDriver);
         }),
-        catchError(this.handleError<Driver>('postDriver'))
+        catchError(this.handleError<Motorista>('postDriver'))
       );
   }
-  */
   /** Tratamento de erro */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

@@ -72,15 +72,15 @@
     <!-- Botão Submeter -->
     <button type="submit">Registar Táxi</button>
   </form>
-</div>
+  <!-- Lista de Táxis -->
+  <h3>Lista de Táxis</h3>
+  <ul>
+    <li *ngFor="let taxi of listaTaxis">
+      {{ taxi.matricula }} - {{ taxi.marca }} {{ taxi.modelo }} ({{ formatarData(taxi.ano_de_compra) }}) - Conforto: {{ taxi.conforto }}
+    </li>
+  </ul>
 
-<!-- Lista de Táxis -->
-<h3>Lista de Táxis</h3>
-<ul>
-  <li *ngFor="let taxi of listaTaxis">
-    {{ taxi.matricula }} - {{ taxi.marca }} {{ taxi.modelo }} ({{ formatarData(taxi.ano_de_compra) }}) - Conforto: {{ taxi.conforto }}
-  </li>
-</ul>
+</div>
 
 <button mat-button (click)="mostrarFormularioMotorista = !mostrarFormularioMotorista">
   {{ mostrarFormularioMotorista ? 'Cancelar' : 'Adicionar Novo Motorista' }}
@@ -130,8 +130,8 @@
         [(ngModel)]="novoMotorista.pessoa.genero"
         required
       >
-        <option [ngValue]="true">Masculino</option>
-        <option [ngValue]="false">Feminino</option>
+        <option [ngValue]="Genero.Masculino">Masculino</option>
+        <option [ngValue]="Genero.Feminino">Feminino</option>
       </select>
     </div>
 
@@ -215,4 +215,18 @@
     <!-- Botão Submeter -->
     <button type="submit">Registar Motorista</button>
   </form>
+
+  <!-- Lista de Motoristas -->
+  <h3>Lista de Motoristas</h3>
+  <ul>
+    <li *ngFor="let driver of listaDrivers">
+      <strong>{{ driver.pessoa.nome }}</strong> ({{ driver.pessoa.nif }})<br>
+      {{ driver.pessoa.genero ? 'Masculino' : 'Feminino' }},
+      Carta: {{ driver.carta_de_conducao }},
+      Nasc.: {{ formatarData(driver.nascimento) }}<br>
+      {{ driver.morada.rua }}, Nº {{ driver.morada.numero_porta }} -
+      {{ driver.morada.codigo_postal }} {{ driver.morada.localidade }}
+    </li>
+  </ul>
+
 </div>

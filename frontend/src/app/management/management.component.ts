@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Taxi } from '../taxi';
 import { Motorista } from '../motorista';
+import { Pessoa, Genero } from '../pessoa';
 import { TaxisService } from '../taxis.service';
 import { DriverService } from '../driver.service';
 import * as Papa from 'papaparse';
@@ -17,6 +18,8 @@ export class ManagementComponent {
   marcasDisponiveis = ['Toyota', 'Mercedes', 'Volkswagen'];
   modelosDisponiveis = ['Prius', 'Classe E', 'Golf'];
   codigosPostais: any[] = [];
+
+  Genero = Genero;
 
   mostrarFormulario: boolean = false;
   mostrarFormularioMotorista = false;
@@ -41,9 +44,9 @@ export class ManagementComponent {
     carta_de_conducao: '',
     nascimento: new Date(),
     pessoa: {
-      nif: 123456789,
+      nif: '123456789',
       nome: 'João Silva',
-      genero: true
+      genero: Genero.Masculino
     }
   };
 
@@ -59,6 +62,7 @@ export class ManagementComponent {
 
   ngOnInit(): void {
     this.getTaxis();
+    this.getDrivers();
   }
 
   //TAXIS-------------------------------------------------------
@@ -92,15 +96,10 @@ export class ManagementComponent {
 
     this.formatarData(this.novoTaxi.ano_de_compra);
 
-    // validacoes aqui
-    const taxiRegistado = {
-      ...this.novoTaxi,
-    };
 
-    // adiciona ao topo da lista
-    this.listaTaxis.unshift(taxiRegistado);
+    this.listaTaxis.unshift(this.novoTaxi);
 
-    this.registarTaxiAux(taxiRegistado);
+    this.registarTaxiAux(this.novoTaxi);
 
     this.limparTaxi();
   }
@@ -177,24 +176,51 @@ export class ManagementComponent {
 
   registarMotorista() {
     console.log('Motorista registado:', this.novoMotorista);
-    this.novoMotorista = {
-      morada: {
-        numero_porta: 0,
-        rua: '',
-        codigo_postal: '',
-        localidade: ''
-        },
-      carta_de_conducao: '',
-      nascimento: new Date(),
-      pessoa: {
-        nif: 0,
-        nome: 'nome',
-        genero: true
-      }
-    };
+    if (!this.nifValido()) {
+      console.log('Nif invalido!');
+      return;
+    }
 
-    this.mostrarFormularioMotorista = false;
+    if (!this.nomeValido()) {
+      console.log('Nome invalido!');
+      return;
+    }
+
+    if(!this.ruaValida()) {
+      console.log('Rua invalida!');
+      return;
+    }
+
+    if(!this.portaValida()) {
+      console.log('Numero de porta invalido');
+      return;
+    }
+
+    this.listaDrivers.unshift(this.novoMotorista);
+    this.registarDriverAux(this.novoMotorista);
+    this.limparDriver();
+    //this.mostrarFormularioMotorista = false;
   }
+
+  registarDriverAux(motorista: Motorista ): void {
+    this.loading = true;
+
+    this.driverService.postDriver(motorista)
+      .subscribe(
+        (motorista: Motorista) => {
+          console.log('Novo driver adicionado:', motorista);
+
+
+          //this.listaDrivers.unshift(motorista);
+          this.loading = false;
+        },
+        (error: any) => {
+          this.errorMessage = 'Erro ao adicionar novo driver: ' + error.message;
+          this.loading = false;
+        }
+      );
+
+    }
 
   nifValido(): boolean {
     // Verifica se contém apenas dígitos
@@ -258,6 +284,25 @@ export class ManagementComponent {
     }
 
     console.log('Localidade encontrada:', this.novoMotorista.morada.localidade);  // Verifique o valor da localidade.
+  }
+
+  limparDriver() {
+
+    this.novoMotorista = {
+          morada: {
+            numero_porta: 0,
+            rua: 'rua',
+            codigo_postal: 'xxxx-xxx',
+            localidade: ''
+          },
+          carta_de_conducao: '',
+          nascimento: new Date(),
+          pessoa: {
+            nif: '0',
+            nome: 'nome',
+            genero: Genero.Masculino
+          }
+    }
   }
 }
 
