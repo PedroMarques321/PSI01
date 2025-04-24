@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { deleteHeroes, deletePets, deleteTaxis, deleteMoradas, deletePessoas, deleteDrivers, createHeroes, createPets, createTaxis, createMoradas, createPessoas, createDrivers } = require('../populatedb');
+const { deleteTaxis, deleteMoradas, deletePessoas, deleteDrivers, deletePrices, createTaxis, createMoradas, createPessoas, createDrivers, createPrices } = require('../populatedb');
 const Hero = require("../models/hero");
 const Pet = require("../models/pet");
 const mongoose = require("mongoose");
@@ -28,23 +28,21 @@ router.get('/', async (req, res) => {
         // Delete current records
         console.log("Deleting current records...");
         await Promise.all([
-          deleteHeroes(),
-          deletePets(),
           deleteTaxis(),
           deleteMoradas(),
           deletePessoas(),
-          deleteDrivers()
+          deleteDrivers(),
+          deletePrices()
         ]);
 
         // Create new records
         console.log("Recreating database records...");
         await Promise.all([
-          createHeroes(),
-          createPets(),
           createTaxis(),
           createMoradas(),
           createPessoas(),
-          createDrivers()
+          createDrivers(),
+          createPrices()
         ]);
       }
 
@@ -52,12 +50,11 @@ router.get('/', async (req, res) => {
         // Create new records
         console.log("Creating database records...");
         await Promise.all([
-          createHeroes(),
-          createPets(),
           createTaxis(),
           createMoradas(),
           createPessoas(),
-          createDrivers()
+          createDrivers(),
+          createPrices()
         ]);
       }
       
