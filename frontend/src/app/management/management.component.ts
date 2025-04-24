@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { Taxi } from '../taxi';
 import { Motorista } from '../motorista';
 import { Pessoa, Genero } from '../pessoa';
+import { Prices } from '../prices';
 import { TaxisService } from '../taxis.service';
 import { DriverService } from '../driver.service';
+import { PricesService } from '../prices.service';
 import * as Papa from 'papaparse';
-
 
 @Component({
   selector: 'app-management',
@@ -23,6 +24,7 @@ export class ManagementComponent {
 
   mostrarFormulario: boolean = false;
   mostrarFormularioMotorista = false;
+  mostrarFormularioPPM = false;
   dataInvalida = true;
 
   novoTaxi: Taxi = {
@@ -56,7 +58,11 @@ export class ManagementComponent {
   loading = false;
   errorMessage = '';
 
-  constructor(private taxisService: TaxisService, private driverService: DriverService) {
+  constructor(
+    private taxisService: TaxisService, 
+    private driverService: DriverService,
+    private pricesService: PricesService
+  ) {
     this.carregarCodigosPostais();
   }
 
@@ -304,5 +310,27 @@ export class ManagementComponent {
           }
     }
   }
-}
 
+
+  /** PREÇOS */
+
+  precos: Prices = {
+    taxa_normal: 0.20,
+    taxa_luxo: 0.30,
+    acrescimo_noturno: 10
+  };
+
+  registarPrecos() {
+    console.log('A atualizar os preços');
+
+    this.pricesService.updatePrices(this.precos)
+      .subscribe(
+        (newPrices: Prices) => {
+          console.log('Preços atualizados:', newPrices);
+        },
+        (error: any) => {
+          this.errorMessage = 'Erro ao atualizar preços: ' + error.message;
+        }
+      );
+  }
+}
