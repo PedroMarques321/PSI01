@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { deleteTaxis, deleteMoradas, deletePessoas, deleteDrivers, deletePrices, createTaxis, createMoradas, createPessoas, createDrivers, createPrices } = require('../populatedb');
-const Hero = require("../models/hero");
-const Pet = require("../models/pet");
+const Price = require("../models/price");
+const Driver = require("../models/driver");
+const Taxi = require("../models/taxi");
+const Morada = require("../models/morada");
+const Pessoa = require("../models/pessoa");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 
@@ -18,12 +21,15 @@ router.get('/', async (req, res) => {
     try {
       console.log("init.js: Initializing database...");
       await mongoose.connect(mongoDB);
-    
-      const heroesCount = await Hero.countDocuments();
-      const petsCount = await Pet.countDocuments();
+
+      const pricesCount = await Price.countDocuments();
+      const driversCount = await Driver.countDocuments();
+      const taxisCount = await Taxi.countDocuments();
+      const moradasCount = await Morada.countDocuments();
+      const pessoasCount = await Pessoa.countDocuments();
 
 
-      if (heroesCount > 0 || petsCount > 0){
+      if (pricesCount > 0 || driversCount > 0 || taxisCount > 0 || moradasCount > 0 || pessoasCount > 0){
 
         // Delete current records
         console.log("Deleting current records...");
@@ -46,7 +52,7 @@ router.get('/', async (req, res) => {
         ]);
       }
 
-      if(heroesCount === 0 && petsCount === 0){
+      if(pricesCount === 0 && driversCount === 0 && taxisCount === 0 && moradasCount === 0 && pessoasCount === 0){
         // Create new records
         console.log("Creating database records...");
         await Promise.all([
