@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { deleteHeroes, deletePets, createHeroes, createPets } = require('../populatedb');
+const { deleteHeroes, deletePets, deleteTaxis, deleteMoradas, deletePessoas, deleteDrivers, createHeroes, createPets, createTaxis, createMoradas, createPessoas, createDrivers } = require('../populatedb');
 const Hero = require("../models/hero");
 const Pet = require("../models/pet");
 const mongoose = require("mongoose");
@@ -29,14 +29,22 @@ router.get('/', async (req, res) => {
         console.log("Deleting current records...");
         await Promise.all([
           deleteHeroes(),
-          deletePets()
+          deletePets(),
+          deleteTaxis(),
+          deleteMoradas(),
+          deletePessoas(),
+          deleteDrivers()
         ]);
 
         // Create new records
         console.log("Recreating database records...");
         await Promise.all([
           createHeroes(),
-          createPets()
+          createPets(),
+          createTaxis(),
+          createMoradas(),
+          createPessoas(),
+          createDrivers()
         ]);
       }
 
@@ -45,7 +53,11 @@ router.get('/', async (req, res) => {
         console.log("Creating database records...");
         await Promise.all([
           createHeroes(),
-          createPets()
+          createPets(),
+          createTaxis(),
+          createMoradas(),
+          createPessoas(),
+          createDrivers()
         ]);
       }
       
