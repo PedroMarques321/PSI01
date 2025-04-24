@@ -27,6 +27,15 @@ export class ManagementComponent {
   mostrarFormularioPPM = false;
   dataInvalida = true;
 
+   horaPartida: string = '';
+   horaChegada: string = '';
+
+  precoFinalNormal: number | null = null;
+  precoFinalLuxo: number | null = null;
+
+  readonly  TAXA_NOTURNA_INICIO = 21;
+  readonly  TAXA_NOTURNA_FIM = 6;
+
   novoTaxi: Taxi = {
     _id: null,
     modelo: 'Prius',
@@ -59,7 +68,7 @@ export class ManagementComponent {
   errorMessage = '';
 
   constructor(
-    private taxisService: TaxisService, 
+    private taxisService: TaxisService,
     private driverService: DriverService,
     private pricesService: PricesService
   ) {
@@ -69,6 +78,7 @@ export class ManagementComponent {
   ngOnInit(): void {
     this.getTaxis();
     this.getDrivers();
+    this.getPrecos();
   }
 
   //TAXIS-------------------------------------------------------
@@ -320,6 +330,23 @@ export class ManagementComponent {
     acrescimo_noturno: 10
   };
 
+  getPrecos(): void {
+
+      this.loading = true;
+      this.pricesService.getPrices()
+        .subscribe(
+          (preco: Prices) => {
+            console.log('Preços recebido:', preco);
+            this.precos = preco;
+            this.loading = false;
+          },
+          (error: any) => {
+            this.errorMessage = 'Erro ao carregar os preços: ' + error.message;
+            this.loading = false;
+          }
+        );
+  }
+
   registarPrecos() {
     console.log('A atualizar os preços');
 
@@ -333,4 +360,50 @@ export class ManagementComponent {
         }
       );
   }
+
+  calcularPrecoFinal(): void {
+
+  if (this.horaPartida && this.horaChegada) {
+    // Criação de objetos Date com base nas horas selecionadas
+
+    const [partidaHoras, partidaMinutos] = this.horaPartida.split(':').map(Number);
+    const [chegadaHoras, chegadaMinutos] = this.horaChegada.split(':').map(Number);
+
+    let partida = new Date();
+    partida.setHours(partidaHoras, partidaMinutos, 0);
+
+    let chegada = new Date();
+    chegada.setHours(chegadaHoras, chegadaMinutos, 0);
+
+    if (chegada.getTime() < partida.getTime()) {
+          chegada.setDate(chegada.getDate() + 1); // Aumenta o dia para corrigir o cálculo
+    }
+
+    let minutosNoturnos = 0;
+    let current = new Date(partida);
+
+    while (current < chegada) {
+      const hora = current.getHours();
+      if (hora >= this.TAXA_NOTURNA_INICIO || hora < this.TAXA_NOTURNA_FIM) {
+        minutosNoturnos++;
+      }
+
+      current.setMinutes(current.getMinutes() + 1);
+    }
+
+    const duracaoMin = (chegada.getTime() - partida.getTime()) / 60000;
+    const minutosNormais = duracaoMin - minutosNoturnos;
+
+    //Conforto normal
+
+    this.precoFinalNormal = minutosNormais*this.precos.taxa_normal + minutosNoturnos*this.precos.taxa_normal*((this.precos.acrescimo_noturno+100)/100);
+    this.precoFinalLuxo = minutosNormais*this.precos.taxa_luxo + minutosNoturnos*this.precos.taxa_luxo*((this.precos.acrescimo_noturno+100)/100);
+
+  } else {
+    alert('Por favor, introduza a hora de partida e de chegada.');
+  }
+
+  }
+
+
 }

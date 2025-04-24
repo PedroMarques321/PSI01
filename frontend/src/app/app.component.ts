@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   constructor(private initService: InitServiceService) { }
 
   ngOnInit(): void {
-    this.initializeDatabase();
+    //this.initializeDatabase();
   }
 
   initializeDatabase(): void {

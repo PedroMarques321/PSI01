@@ -301,4 +301,22 @@
       <td>{{ precos.acrescimo_noturno }}%</td>
     </tr>
   </table>
+
+  <!-- Horário de Partida e Chegada -->
+  <div>
+    <h3>Calcular Preço Final</h3>
+
+    <label for="hora_partida">Hora de Partida:</label>
+    <input type="time" id="hora_partida" name="hora_partida" [(ngModel)]="horaPartida" required>
+
+    <label for="hora_chegada">Hora de Chegada:</label>
+    <input type="time" id="hora_chegada" name="hora_chegada" [(ngModel)]="horaChegada" required>
+
+    <button (click)="calcularPrecoFinal()">Calcular Preço Final</button>
+  </div>
+  <div *ngIf="precoFinalNormal !== null && precoFinalLuxo !== null">
+    <h4>Resultado do Cálculo:</h4>
+    <p>Preço Final - Serviço Normal: {{ precoFinalNormal.toFixed(2) }} €</p>
+    <p>Preço Final - Serviço Luxo: {{ precoFinalLuxo.toFixed(2) }} €</p>
+  </div>
 </div>
