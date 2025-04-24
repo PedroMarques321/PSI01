@@ -1,43 +1,14 @@
-const Hero = require('./models/hero');
-const Pet = require('./models/pet');
 const Taxi = require('./models/taxi');
 const Driver = require('./models/motorista');
 const Pessoa = require('./models/pessoa');
 const Morada = require('./models/morada');
+const Price = require('./models/price');
 
-var heroes = [];
-var pets = [];
 var taxis = [];
 var drivers = [];
 var pessoas = [];
 var moradas = [];
-
-async function heroCreate(index, code, name, pet) {
-    const herodetail = {
-        code: code, 
-        name: name, 
-        pet: pet,
-      };
-  
-    const hero = new Hero(herodetail);
-  
-    await hero.save();
-    heroes[index] = hero;
-    console.log(`Added hero: ${code} ${name}`);
-}
-
-async function petCreate(index, code, name, owner) {
-    const petdetail = {
-        code: code,
-        name: name,
-        owner: owner,
-    };
-  
-    const pet = new Pet(petdetail);
-    await pet.save();
-    pets[index] = pet;
-    console.log(`Added pet: ${code} ${name}`);
-}
+var prices = [];
 
 async function pessoaCreate(index, nif, nome, genero) {
     const pessoadetail = {
@@ -96,35 +67,17 @@ async function driverCreate(index, morada, carta_de_conducao, pessoa, nascimento
     console.log(`Added driver: ${morada} ${carta_de_conducao} ${pessoa} ${nascimento}`);
 }
 
-async function createHeroes() {
-    console.log("Creating Heroes");
-    await Promise.all([
-        heroCreate(0, 12, "Dr. Nice"),
-        heroCreate(1, 13, "Bombasto"),
-        heroCreate(2, 14, "Celeritas"),
-        heroCreate(3, 15, "Magneta"),
-        heroCreate(4, 16, "RubberMan"),
-        heroCreate(5, 17, "Dynama"),
-        heroCreate(6, 18, "Dr. IQ"),
-        heroCreate(7, 19, "Magma"),
-        heroCreate(8, 20, "Tornado")
-    ]);
-}
+async function priceCreate(index, taxa_normal, taxa_luxo, acrescimo_noturno) {
+    const pricedetail = {
+        taxa_normal: taxa_normal,
+        taxa_luxo: taxa_luxo,
+        acrescimo_noturno: acrescimo_noturno,
+    };
 
-async function createPets() {
-console.log("Creating Pets");
-    await Promise.all([
-        petCreate(0, 21, "Rato Esquilo", heroes[0]),
-        petCreate(1, 22, "Bolinhas"),
-        petCreate(2, 23,"Stitch"),
-        petCreate(3, 24, "Lady", heroes[3]),
-        petCreate(4, 25, "Dynamox"),
-        petCreate(5, 26, "Lemos"),
-        petCreate(6, 27, "Pingu"),
-        petCreate(7, 28, "Peaners"),
-        petCreate(8, 29, "JJ"),
-        petCreate(9, 30, "Bimbo")
-    ]);
+    const price = new Price(pricedetail);
+    await price.save();
+    prices[index] = price;
+    console.log(`Added price: ${taxa_normal} ${taxa_luxo} ${acrescimo_noturno}`);
 }
 
 async function createMoradas() {
@@ -162,6 +115,14 @@ async function createDrivers() {
         driverCreate(2, moradas[2], "1234561890", pessoas[2], new Date("1990-01-01"))
     ]);
 }
+
+async function createPrices() {
+    console.log("Creating Prices");
+    await Promise.all([
+        priceCreate(0, 0.20, 0.30, 10)
+    ]);
+}
+
 async function deleteHeroes() {
     console.log('Deleting Hero records');
     try {
@@ -224,17 +185,27 @@ async function deleteDrivers(){
     }
 }
 
+async function deletePrices() {
+    console.log('Deleting Price records');
+    try {
+        await Price.deleteMany({});
+        console.log('Price records deleted');
+    } catch (err) {
+        console.log('Error deleting Price records:', err);
+    }
+}
+
 module.exports = {
-    createHeroes,
-    createPets,
     createTaxis,
     createMoradas,
     createPessoas,
     createDrivers,
+    createPrices,
     deleteHeroes,
     deletePets,
     deleteTaxis,
     deleteMoradas,
     deletePessoas,
-    deleteDrivers
+    deleteDrivers,
+    deletePrices
 }
