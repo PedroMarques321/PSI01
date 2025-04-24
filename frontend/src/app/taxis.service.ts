@@ -12,9 +12,9 @@ export class TaxisService {
   private allTaxisUrl = 'http://localhost:3000/dashboard/taxis';
   private postTaxiUrl = 'http://localhost:3000/dashboard/taxi';
 
-    httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    };
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 
   constructor(private http: HttpClient) { }
 
