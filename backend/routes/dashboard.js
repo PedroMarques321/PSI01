@@ -29,4 +29,10 @@ const drivercontroller = require("../controllers/driverController");
 router.get("/drivers", drivercontroller.driverGetAll);
 router.post("/driver", drivercontroller.driverCreate);
 
+const pricecontroller = require("../controllers/priceController");
+
+//Price endpoints
+router.get("/prices", pricecontroller.pricesGetAll);
+router.put("/prices", pricecontroller.pricesPut);
+
 module.exports = router;
