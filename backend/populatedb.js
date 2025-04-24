@@ -1,11 +1,16 @@
 const Hero = require('./models/hero');
 const Pet = require('./models/pet');
 const Taxi = require('./models/taxi');
-const Driver = require('./models/driver');
+const Driver = require('./models/motorista');
+const Pessoa = require('./models/pessoa');
+const Morada = require('./models/morada');
 
 var heroes = [];
 var pets = [];
 var taxis = [];
+var drivers = [];
+var pessoas = [];
+var moradas = [];
 
 async function heroCreate(index, code, name, pet) {
     const herodetail = {
@@ -34,6 +39,33 @@ async function petCreate(index, code, name, owner) {
     console.log(`Added pet: ${code} ${name}`);
 }
 
+async function pessoaCreate(index, nif, nome, genero) {
+    const pessoadetail = {
+        nif: nif,
+        nome: nome,
+        genero: genero,
+    };
+
+    const pessoa = new Pessoa(pessoadetail);
+    await pessoa.save();
+    pessoas[index] = pessoa;
+    console.log(`Added pessoa: ${nome}`);
+}
+
+async function moradaCreate(index, numero_porta, rua, codigo_postal, localidade) {
+    const moradadetail = {
+        numero_porta: numero_porta,
+        rua: rua,
+        codigo_postal: codigo_postal,
+        localidade: localidade,
+    };
+
+    const morada = new Morada(moradadetail);
+    await morada.save();
+    moradas[index] = morada;
+    console.log(`Added morada: ${numero_porta} ${rua} ${codigo_postal} ${localidade}`);
+}
+
 async function taxiCreate(index, modelo, marca, conforto, matricula, ano_de_compra) {
     const taxidetail = {
         modelo: modelo,
@@ -48,6 +80,20 @@ async function taxiCreate(index, modelo, marca, conforto, matricula, ano_de_comp
     await taxi.save();
     taxis[index] = taxi;
     console.log(`Added taxi: ${modelo} ${marca}`);
+}
+
+async function driverCreate(index, morada, carta_de_conducao, pessoa, nascimento) {
+    const driverdetail = {
+        morada: morada,
+        carta_de_conducao: carta_de_conducao,
+        pessoa: pessoa,
+        nascimento: nascimento,
+    };
+
+    const driver = new Driver(driverdetail);
+    await driver.save();
+    drivers[index] = driver;
+    console.log(`Added driver: ${morada} ${carta_de_conducao} ${pessoa} ${nascimento}`);
 }
 
 async function createHeroes() {
@@ -81,6 +127,24 @@ console.log("Creating Pets");
     ]);
 }
 
+async function createMoradas() {
+    console.log("Creating Moradas");
+    await Promise.all([
+        moradaCreate(0, 10, "Rua da Paz", "4000-000", "Porto"),
+        moradaCreate(1, 6, "Rua da Liberdade", "1000-000", "Lisboa"),
+        moradaCreate(2, 7, "Rua da Restauração", "3000-000", "Coimbra")
+    ]);
+}
+
+async function createPessoas() {
+    console.log("Creating Pessoas");
+    await Promise.all([
+        pessoaCreate(0, 213421234,"João", "Masculino"),
+        pessoaCreate(1, 213421535,"Maria", "Feminino"),
+        pessoaCreate(2, 213261836,"António", "Masculino")
+    ]);
+}
+
 async function createTaxis() {
     console.log("Creating Taxis");
     await Promise.all([
@@ -90,6 +154,14 @@ async function createTaxis() {
     ]);
 }
 
+async function createDrivers() {
+    console.log("Creating Drivers");
+    await Promise.all([
+        driverCreate(0, moradas[0], "1914567890", pessoas[0], new Date("1990-01-01")),
+        driverCreate(1, moradas[1], "1232567890", pessoas[1], new Date("1990-01-01")),
+        driverCreate(2, moradas[2], "1234561890", pessoas[2], new Date("1990-01-01"))
+    ]);
+}
 async function deleteHeroes() {
     console.log('Deleting Hero records');
     try {
@@ -111,6 +183,26 @@ async function deletePets(){
     }
 }
 
+async function deleteMoradas(){
+    console.log('Deleting Morada records');
+    try {
+        await Morada.deleteMany({});
+        console.log('Morada records deleted');
+    } catch (err) {
+        console.log('Error deleting Morada records:', err);
+    }
+}
+
+async function deletePessoas(){
+    console.log('Deleting Pessoa records');
+    try {
+        await Pessoa.deleteMany({});
+        console.log('Pessoa records deleted');
+    } catch (err) {
+        console.log('Error deleting Pessoa records:', err);
+    }
+}
+
 async function deleteTaxis(){
     console.log('Deleting Taxi records');
     try {
@@ -122,11 +214,27 @@ async function deleteTaxis(){
     console.log('Taxis deleted');
 }
 
+async function deleteDrivers(){
+    console.log('Deleting Driver records');
+    try {
+        await Driver.deleteMany({});
+        console.log('Driver records deleted');
+    } catch (err) {
+        console.log('Error deleting Driver records:', err);
+    }
+}
+
 module.exports = {
     createHeroes,
     createPets,
     createTaxis,
+    createMoradas,
+    createPessoas,
+    createDrivers,
     deleteHeroes,
     deletePets,
-    deleteTaxis
+    deleteTaxis,
+    deleteMoradas,
+    deletePessoas,
+    deleteDrivers
 }
