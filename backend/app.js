@@ -16,12 +16,12 @@ var petRouter = require('./routes/pet');
 
 var app = express();
 
-const mongoose = require('mongoose');
-mongoose.connect("mongodb://localhost:27017/webtaxi").then(() => {
-  console.log("Ligado à base de dados MongoDB");
-}).catch((err) => {
-  console.error("Erro na ligação à base de dados:", err);
-});
+//const mongoose = require('mongoose');
+//mongoose.connect("mongodb://localhost:27017/webtaxi").then(() => {
+//  console.log("Ligado à base de dados MongoDB");
+//}).catch((err) => {
+//  console.error("Erro na ligação à base de dados:", err);
+//});
 
 // CORS
 app.use(cors());
@@ -37,13 +37,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/init', initRouter);    
-app.use('/heroes', heroesRouter);   
-app.use('/hero', heroRouter);
-app.use('/pets', petsRouter);  
-app.use('/pet', petRouter);   
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
