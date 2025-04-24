@@ -1,8 +1,11 @@
 const Hero = require('./models/hero');
 const Pet = require('./models/pet');
+const Taxi = require('./models/taxi');
+const Driver = require('./models/driver');
 
 var heroes = [];
 var pets = [];
+var taxis = [];
 
 async function heroCreate(index, code, name, pet) {
     const herodetail = {
@@ -29,6 +32,22 @@ async function petCreate(index, code, name, owner) {
     await pet.save();
     pets[index] = pet;
     console.log(`Added pet: ${code} ${name}`);
+}
+
+async function taxiCreate(index, modelo, marca, conforto, matricula, ano_de_compra) {
+    const taxidetail = {
+        modelo: modelo,
+        marca: marca,
+        conforto: conforto,
+        matricula: matricula,
+        ano_de_compra: ano_de_compra,
+    };
+
+    const taxi = new Taxi(taxidetail);
+    
+    await taxi.save();
+    taxis[index] = taxi;
+    console.log(`Added taxi: ${modelo} ${marca}`);
 }
 
 async function createHeroes() {
@@ -62,6 +81,15 @@ console.log("Creating Pets");
     ]);
 }
 
+async function createTaxis() {
+    console.log("Creating Taxis");
+    await Promise.all([
+        taxiCreate(0, "Prius", "Toyota", "Normal", "38-33-TH", new Date("2018-01-01")),
+        taxiCreate(1, "Classe-E", "Mercedes", "Normal", "15-MF-48", new Date("2017-05-12")),
+        taxiCreate(2, "Prius", "Toyota", "Normal", "00-00-AA", new Date("2019-09-23"))
+    ]);
+}
+
 async function deleteHeroes() {
     console.log('Deleting Hero records');
     try {
@@ -83,9 +111,22 @@ async function deletePets(){
     }
 }
 
+async function deleteTaxis(){
+    console.log('Deleting Taxi records');
+    try {
+        await Taxi.deleteMany({});
+        console.log('Taxi records deleted');
+    } catch (err) {
+        console.log('Error deleting Taxi records:', err);
+    }
+    console.log('Taxis deleted');
+}
+
 module.exports = {
     createHeroes,
     createPets,
+    createTaxis,
     deleteHeroes,
-    deletePets
+    deletePets,
+    deleteTaxis
 }
