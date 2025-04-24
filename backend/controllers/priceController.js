@@ -23,13 +23,14 @@ exports.pricesGetAll = asyncHandler(async (req, res, next) => {
 exports.pricesPut = asyncHandler(async (req, res, next) => {
     console.log("priceController(pricesPut): Updating prices");
 
-    const { taxa_normal, taxa_luxo, acrescimo_noturno } = req.body;
     const prices = await Price.findOne();
 
     if(prices === null) {
         res.status(404);
         throw new Error("priceController(pricesPut): No prices found");
     }
+
+    const { taxa_normal, taxa_luxo, acrescimo_noturno } = req.body;
 
     prices.taxa_normal = taxa_normal;
     prices.taxa_luxo = taxa_luxo;
