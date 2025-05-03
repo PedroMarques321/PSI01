@@ -24,13 +24,13 @@
     </div>
 
     <div *ngIf="!validarMatricula(novoTaxi.matricula)" style="color: red;">
-      Matrícula inválida! Deve conter pelo menos uma letra e um número.
+      Matrícula inválida!
     </div>
 
     <!-- Marca -->
     <div>
       <label for="marca">Marca:</label>
-      <select id="marca" name="marca" [(ngModel)]="novoTaxi.marca" required>
+      <select id="marca" name="marca" [(ngModel)]="novoTaxi.marca" (change)="atualizarModelos()" required>
         <option value="" disabled>-- Escolhe a marca --</option>
         <option *ngFor="let marca of marcasDisponiveis" [value]="marca">{{ marca }}</option>
       </select>
@@ -39,7 +39,7 @@
     <!-- Modelo -->
     <div>
       <label for="modelo">Modelo:</label>
-      <select id="modelo" name="modelo" [(ngModel)]="novoTaxi.modelo" required>
+      <select id="modelo" name="modelo" [(ngModel)]="novoTaxi.modelo" [disabled]="!modelosDisponiveis.length" required>
         <option value="" disabled>-- Escolhe o modelo --</option>
         <option *ngFor="let modelo of modelosDisponiveis" [value]="modelo">{{ modelo }}</option>
       </select>

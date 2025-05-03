@@ -17,7 +17,7 @@ const mongoDB = "mongodb+srv://pedromarques2881997:dSjSww1uXxE6sbJP@cluster0.tj7
   // in which the elements of promise.all's argument complete.
 
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res) => {/**
     try {
       console.log("init.js: Initializing database...");
       await mongoose.connect(mongoDB);
@@ -69,7 +69,7 @@ router.get('/', async (req, res) => {
     } catch (err) {
       console.error('Error initializing database:', err);
       res.status(500).json({ message: 'Internal server error' });
-    }
+    }*/
   });
 
   module.exports = router;

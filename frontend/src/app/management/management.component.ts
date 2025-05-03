@@ -17,7 +17,20 @@ import * as Papa from 'papaparse';
 export class ManagementComponent {
 
   marcasDisponiveis = ['Toyota', 'Mercedes', 'Volkswagen'];
-  modelosDisponiveis = ['Prius', 'Classe E', 'Golf'];
+  todosModelos: { [marca: string]: string[] } = {
+    Toyota: ['Prius', 'Corolla', 'Yaris'],
+    Mercedes: ['Classe A', 'Classe C', 'Classe E'],
+    Volkswagen: ['Golf', 'Passat', 'Tiguan']
+  };
+
+  modelosDisponiveis: string[] = [];
+
+  // Método para atualizar os modelos disponíveis
+  atualizarModelos(): void {
+    this.modelosDisponiveis = this.todosModelos[this.novoTaxi.marca] || [];
+    this.novoTaxi.modelo = '';
+  }
+
   codigosPostais: any[] = [];
 
   Genero = Genero;
@@ -88,7 +101,7 @@ export class ManagementComponent {
       .subscribe(
         (taxis: Taxi[]) => {
           console.log('Taxis recebidos:', taxis);
-          this.listaTaxis = taxis;
+          this.listaTaxis = taxis.reverse();
           this.loading = false;
         },
         (error: any) => {
@@ -129,7 +142,7 @@ export class ManagementComponent {
           console.log('Novo taxi adicionado:', novoTaxi);
 
 
-          this.listaTaxis.unshift(novoTaxi);
+          //this.listaTaxis.unshift(novoTaxi);
           this.loading = false;
         },
         (error: any) => {
@@ -142,7 +155,10 @@ export class ManagementComponent {
   validarMatricula(matricula: string): boolean {
     const regex = /^\d{2}-\d{2}-[A-Za-z]{2}$|^\d{2}-[A-Za-z]{2}-\d{2}$|^[A-Za-z]{2}-\d{2}-\d{2}$|^[A-Za-z]{2}-[A-Za-z]{2}-\d{2}$|^[A-Za-z]{2}-\d{2}-[A-Za-z]{2}$|^\d{2}-[A-Za-z]{2}-[A-Za-z]{2}$/;
 
-    return regex.test(matricula);
+    const formatoValido = regex.test(matricula);
+    const matriculaExiste = this.listaTaxis.some(taxi => taxi.matricula.toLowerCase() === matricula.toLowerCase());
+
+    return formatoValido && !matriculaExiste;
   }
 
   validarData( data: Date ) {
