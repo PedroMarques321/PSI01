@@ -118,7 +118,7 @@ export class ManagementComponent {
       return;
     }
 
-    if (this.validarData(this.novoTaxi.ano_de_compra)) {
+    if (this.validarData(this.novoTaxi.ano_de_compra,0)) {
       console.log('Data inválida!');
       return;
     }
@@ -161,11 +161,21 @@ export class ManagementComponent {
     return formatoValido && !matriculaExiste;
   }
 
-  validarData( data: Date ) {
+  validarData(data: Date, anosMinimos: number): boolean {
     const dataInserida = new Date(data);
     const dataAtual = new Date();
 
-    return dataInserida > dataAtual;
+    if (anosMinimos === 0) {
+      // Verifica que a data não está no futuro
+      return dataInserida <= dataAtual;
+    } else {
+      // Calcula a data mínima aceitável
+      const dataMinima = new Date();
+      dataMinima.setFullYear(dataAtual.getFullYear() - anosMinimos);
+
+      // Verifica se a data inserida é igual ou anterior à data mínima
+      return dataInserida <= dataMinima;
+    }
   }
 
   formatarData(data: any): string {
@@ -195,7 +205,7 @@ export class ManagementComponent {
         .subscribe(
           (motoristas: Motorista[]) => {
             console.log('Drivers recebidos:', motoristas);
-            this.listaDrivers = motoristas;
+            this.listaDrivers = motoristas.reverse();
             this.loading = false;
           },
           (error: any) => {
@@ -228,6 +238,11 @@ export class ManagementComponent {
       return;
     }
 
+    if (!this.validarData(this.novoMotorista.nascimento, 18)) {
+      console.log('O motorista deve ter pelo menos 18 anos.');
+      return;
+    }
+
     this.listaDrivers.unshift(this.novoMotorista);
     this.registarDriverAux(this.novoMotorista);
     this.limparDriver();
@@ -255,9 +270,17 @@ export class ManagementComponent {
     }
 
   nifValido(): boolean {
+    const nif = String(this.novoMotorista.pessoa.nif);
+
     // Verifica se contém apenas dígitos
-    return /^[0-9]+$/.test(String(this.novoMotorista.pessoa.nif));
+    const formatoValido = /^[0-9]{9}$/.test(nif);
+
+    // Verifica se já existe na lista
+    const nifDuplicado = this.listaDrivers.some(driver => String(driver.pessoa.nif) === nif);
+
+    return formatoValido && !nifDuplicado;
   }
+
 
   nomeValido(): boolean {
     // Verifica se contém apenas letras (com espaços permitidos)

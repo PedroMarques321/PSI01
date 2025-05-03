@@ -56,7 +56,7 @@
         required
       />
     </div>
-    <div *ngIf="validarData(novoTaxi.ano_de_compra)" style="color: red;">
+    <div *ngIf="validarData(novoTaxi.ano_de_compra,0)" style="color: red;">
       A data de compra não pode ser superior à data atual.
     </div>
 
@@ -103,7 +103,7 @@
       />
     </div>
     <div *ngIf="!nifValido()" style="color: red;">
-      O NIF deve conter apenas números.
+      NIF inválido.
     </div>
 
     <!-- Nome -->
@@ -208,7 +208,7 @@
         required
       />
     </div>
-    <div *ngIf="validarData(novoMotorista.nascimento)" style="color: red;">
+    <div *ngIf="!validarData(novoMotorista.nascimento, 18)" style="color: red;">
       A data de nascimento não está certa.
     </div>
 
