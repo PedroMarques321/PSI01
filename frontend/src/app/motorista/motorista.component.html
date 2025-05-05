@@ -1,0 +1,93 @@
+<div class="container" *ngIf="!loginConfirmado">
+  <h2>Login de Motorista</h2>
+
+  <!-- Input manual de NIF -->
+  <div>
+    <label for="nifInput">Digite ou escolha o seu NIF:</label>
+    <input
+      type="text"
+      id="nifInput"
+      [(ngModel)]="nifSelecionado"
+      placeholder="Digite o NIF"
+    />
+  </div>
+
+  <!-- Lista de NIFs -->
+  <div style="margin-top: 8px;">
+    <label for="nifSelect">Ou escolha da lista:</label>
+    <select id="nifSelect" (change)="onSelectNif($event)">
+      <option value="">-- Seleciona o NIF --</option>
+      <option *ngFor="let motorista of listaDrivers" [value]="motorista.pessoa.nif">
+        {{ motorista.pessoa.nif }} - {{ motorista.pessoa.nome }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Botão de confirmar -->
+  <div style="margin-top: 10px;">
+    <button (click)="confirmarLogin()" [disabled]="!nifSelecionado">Confirmar</button>
+  </div>
+
+  <div *ngIf="erroNif" style="color: red; margin-top: 5px;">
+    NIF não encontrado.
+  </div>
+</div>
+
+<!-- Saída pós-login -->
+<div *ngIf="loginConfirmado">
+  <p>Bem-vindo, {{ motoristaLogado?.pessoa?.nome }} (NIF: {{ motoristaLogado?.pessoa?.nif }})</p>
+
+  <!-- Formulário de turno -->
+  <div class="turno-formulario" style="margin-top: 20px;">
+    <h3>Indique o seu turno de trabalho</h3>
+
+    <label for="dataInicio">Data e Hora de Início:</label>
+    <input
+      type="datetime-local"
+      id="dataInicio"
+      [(ngModel)]="dataInicioStr"
+      name="dataInicio"
+      required
+    />
+
+    <label for="dataFim">Data e Hora de Fim:</label>
+    <input
+      type="datetime-local"
+      id="dataFim"
+      [(ngModel)]="dataFimStr"
+      name="dataFim"
+      required
+    />
+
+    <div style="margin-bottom: 10px;">
+      <label for="taxiSelect">Selecione o Táxi:</label>
+      <select id="taxiSelect" [(ngModel)]="turno.taxi" name="taxi" required>
+        <option *ngFor="let t of listaTaxis" [ngValue]="t">
+          {{ t.marca }} {{ t.modelo }} - {{ t.matricula }}
+        </option>
+      </select>
+    </div>
+
+    <button
+      (click)="confirmarTurno()"
+      [disabled]="!turno.dataInicio || !turno.dataFim || !turno.taxi"
+    >
+      Confirmar Turno
+    </button>
+  </div>
+</div>
+
+<!-- Lista de turnos -->
+<div *ngIf="listaTurnos.length > 0" style="margin-top: 20px;">
+  <h3>Lista de Turnos Confirmados</h3>
+  <ul>
+    <li *ngFor="let turno of listaTurnos">
+      <p><strong>Motorista:</strong> {{ turno.motorista.pessoa.nome }} (NIF: {{ turno.motorista.pessoa.nif }})</p>
+      <p><strong>Táxi:</strong> {{ turno.taxi.marca }} {{ turno.taxi.modelo }} - {{ turno.taxi.matricula }}</p>
+      <p><strong>Início:</strong> {{ turno.dataInicio | date: 'dd/MM/yyyy HH:mm' }}</p>
+      <p><strong>Fim:</strong> {{ turno.dataFim | date: 'dd/MM/yyyy HH:mm' }}</p>
+    </li>
+  </ul>
+</div>
+
+

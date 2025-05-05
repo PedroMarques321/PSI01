@@ -13,13 +13,15 @@ import { FormsModule } from '@angular/forms';
 // Angular Material Imports
 import { MaterialImports } from './material.imports';
 import { ManagementComponent } from './management/management.component';
+import { MotoristaComponent } from './motorista/motorista.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     HeaderComponent,
-    ManagementComponent
+    ManagementComponent,
+    MotoristaComponent
   ],
   imports: [
     BrowserModule,

@@ -19,4 +19,10 @@ const pricecontroller = require("../controllers/priceController");
 router.get("/prices", pricecontroller.pricesGetAll);
 router.put("/prices", pricecontroller.pricesPut);
 
+const turnocontroller = require("../controllers/turnoController");
+
+// Turno endpoints
+router.get("/turnos", turnocontroller.turnosGetAll); // Listar todos os turnos
+router.post("/turno", turnocontroller.turnoCreate); // Criar novo turno
+
 module.exports = router;
