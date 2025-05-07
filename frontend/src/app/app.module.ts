@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { MaterialImports } from './material.imports';
 import { ManagementComponent } from './management/management.component';
 import { MotoristaComponent } from './motorista/motorista.component';
+import { ClienteComponent } from './cliente/cliente.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { MotoristaComponent } from './motorista/motorista.component';
     DashboardComponent,
     HeaderComponent,
     ManagementComponent,
-    MotoristaComponent
+    MotoristaComponent,
+    ClienteComponent
   ],
   imports: [
     BrowserModule,

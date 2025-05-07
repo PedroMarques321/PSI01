@@ -8,6 +8,7 @@ const taxiSchema = new schema({
     conforto: { type: String, required: true, maxLength: 20 },
     matricula: { type: String, required: true, maxLength: 28 },
     ano_de_compra:  { type: Date, required: true },
+    lugares: { type: Number, required: true}
 });
 
 taxiSchema.virtual('url').get(function() {

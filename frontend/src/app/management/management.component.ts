@@ -55,7 +55,8 @@ export class ManagementComponent {
     marca: 'Toyota',
     conforto: 'Normal',
     matricula: 'AA-00-AA',
-    ano_de_compra: new Date()
+    ano_de_compra: new Date(),
+    lugares: 4
   };
 
   novoMotorista = {
@@ -193,7 +194,8 @@ export class ManagementComponent {
       marca: 'Toyota',
       conforto: 'Normal',
       matricula: 'AA-00-AA',
-      ano_de_compra: new Date()
+      ano_de_compra: new Date(),
+      lugares: 4
     };
   }
 

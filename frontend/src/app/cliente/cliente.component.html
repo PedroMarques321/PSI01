@@ -1,0 +1,44 @@
+<div *ngIf="mostrarFormularioCliente">
+  <h2 class="titulo">Pedido de Táxi</h2>
+
+  <form (ngSubmit)="registarClienteViagem()" #formCliente="ngForm">
+    <!-- DADOS PESSOAIS -->
+    <h3>Dados do Cliente</h3>
+    <div>
+      <label for="nif">NIF:</label>
+      <input type="number" id="nif" name="nif" [(ngModel)]="cliente.pessoa.nif" required />
+    </div>
+    <div *ngIf="!nifValido()" style="color: red;">NIF inválido.</div>
+
+    <div>
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" [(ngModel)]="cliente.pessoa.nome" required />
+    </div>
+    <div *ngIf="!nomeValido()" style="color: red;">O nome não deve conter números.</div>
+
+    <div>
+      <label for="genero">Género:</label>
+      <select id="genero" name="genero" [(ngModel)]="cliente.pessoa.genero" required>
+        <option [ngValue]="true">Masculino</option>
+        <option [ngValue]="false">Feminino</option>
+      </select>
+    </div>
+
+    <!-- DADOS DA VIAGEM -->
+    <h3>Detalhes da Viagem</h3>
+    <div>
+      <label for="moradaPartida">Morada de Partida:</label>
+      <input type="text" id="moradaPartida" name="moradaPartida" [(ngModel)]="novaViagem.moradaPartida" placeholder="Ex: Avenida da Liberdade, Lisboa, Portugal" />
+    </div>
+    <div>
+      <label for="moradaChegada">Morada de Chegada:</label>
+      <input type="text" id="moradaChegada" name="moradaChegada" [(ngModel)]="novaViagem.moradaChegada"  placeholder="Ex: Praça do Comércio, Lisboa, Portugal" required />
+    </div>
+    <div>
+      <label for="numeroPessoas">N.º de Pessoas:</label>
+      <input type="number" id="numeroPessoas" name="numeroPessoas" [(ngModel)]="novaViagem.numeroPessoas" min="1" required />
+    </div>
+
+    <button type="submit">Submeter Pedido</button>
+  </form>
+</div>
