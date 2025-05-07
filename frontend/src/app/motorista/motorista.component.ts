@@ -19,6 +19,7 @@ export class MotoristaComponent {
   listaTaxis: Taxi[] = [];
   listaTaxisDisponiveis: Taxi[] = [];
   listaTurnos: Turno[] = [];
+  listaTurnosMotorista: Turno[] = [];
   loading = false;
   errorMessage = '';
   dataInicioStr: string = '';
@@ -49,6 +50,7 @@ export class MotoristaComponent {
        this.motoristaLogado = motorista;
        this.loginConfirmado = true;
        this.erroNif = false;
+       this.setCurrentTurnos();
      } else {
        this.erroNif = true;
      }
@@ -217,5 +219,11 @@ export class MotoristaComponent {
     console.log('Táxis com conflitos:', taxisConflitantes);
     console.log('Táxis todos:', this.listaTaxis);
     return taxisConflitantes;
+  }
+
+  setCurrentTurnos(): void {
+    this.listaTurnosMotorista = this.listaTurnos.filter(turno =>
+        turno.motorista.pessoa.nif === this.motoristaLogado?.pessoa.nif
+      );
   }
 }

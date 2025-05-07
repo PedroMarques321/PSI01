@@ -83,7 +83,7 @@
 <div *ngIf="listaTurnos.length > 0" style="margin-top: 20px;">
   <h3>Lista de Turnos Confirmados</h3>
   <ul>
-    <li *ngFor="let turno of listaTurnos">
+    <li *ngFor="let turno of listaTurnosMotorista">
       <p><strong>Motorista:</strong> {{ turno.motorista.pessoa.nome }} (NIF: {{ turno.motorista.pessoa.nif }})</p>
       <p><strong>Táxi:</strong> {{ turno.taxi.marca }} {{ turno.taxi.modelo }} - {{ turno.taxi.matricula }}</p>
       <p><strong>Início:</strong> {{ turno.dataInicio | date: 'dd/MM/yyyy HH:mm' }}</p>
