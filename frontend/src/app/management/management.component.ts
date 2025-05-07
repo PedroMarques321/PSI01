@@ -118,7 +118,7 @@ export class ManagementComponent {
       return;
     }
 
-    if (this.validarData(this.novoTaxi.ano_de_compra,0)) {
+    if (!this.validarData(this.novoTaxi.ano_de_compra,0)) {
       console.log('Data inválida!');
       return;
     }

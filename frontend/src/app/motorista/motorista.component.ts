@@ -17,6 +17,7 @@ export class MotoristaComponent {
 
   listaDrivers: Motorista[] = [];
   listaTaxis: Taxi[] = [];
+  listaTaxisDisponiveis: Taxi[] = [];
   listaTurnos: Turno[] = [];
   loading = false;
   errorMessage = '';
@@ -148,17 +149,31 @@ export class MotoristaComponent {
           console.error('Erro ao criar o turno:', error);
         }
       );
-      this.listaTurnos.push(this.turno);
+      const novoTurno: Turno = {
+        dataInicio: new Date(this.turno.dataInicio),
+        dataFim: new Date(this.turno.dataFim),
+        motorista: JSON.parse(JSON.stringify(this.turno.motorista)), // cópia profunda
+        taxi: JSON.parse(JSON.stringify(this.turno.taxi))            // cópia profunda
+      };
+
+        this.listaTurnos.push(novoTurno);
     }
   }
 
   verificarTurnoExistente(): boolean {
     // Verifica se já existe um turno para o mesmo motorista e no mesmo período
     const turnoExistente = this.listaTurnos.some(turno => {
+      const inicioAtual = new Date(turno.dataInicio);
+      const fimAtual = new Date(turno.dataFim);
       // Verifica se o turno já existe e se as datas coincidem
-      const mesmaDataInicio = this.turno.dataInicio < turno.dataFim && this.turno.dataFim > turno.dataInicio;
+      console.log('Turno Atual - Início:', inicioAtual, 'Fim:', fimAtual);
+      console.log('Turno Existente - Início:', this.turno.dataInicio, 'Fim:', this.turno.dataFim);
+
+      const mesmaDataInicio = this.turno.dataInicio < fimAtual && this.turno.dataFim > inicioAtual;
       const mesmoMotorista = turno.motorista.pessoa.nif === this.motoristaLogado?.pessoa.nif;
 
+      console.log('Datas coincidem: ',mesmaDataInicio);
+      console.log('Motorista coincide: ',mesmoMotorista);
       return mesmaDataInicio && mesmoMotorista;
     });
 
@@ -171,5 +186,36 @@ export class MotoristaComponent {
     const oitoHorasMs = 8 * 60 * 60 * 1000;
 
     return this.turno.dataInicio < this.turno.dataFim && duracaoMs <= oitoHorasMs;
+  }
+
+  onDateChange(): void {
+    const conflitos = this.verificarTurnoTaxisExistente();
+    if (conflitos.length > 0) {
+      this.listaTaxisDisponiveis = this.listaTaxis.filter(taxi =>
+            !conflitos.some(conflictTaxi => conflictTaxi.matricula === taxi.matricula)
+      );
+    } else {
+      this.listaTaxisDisponiveis = this.listaTaxis;
+      console.log('Nenhum conflito de turno encontrado.');
+    }
+  }
+
+  verificarTurnoTaxisExistente(): Taxi[] {
+    console.log('hey');
+    if (!this.dataInicioStr || !this.dataFimStr) return [];
+
+    const novoInicio = new Date(this.dataInicioStr);
+    const novoFim = new Date(this.dataFimStr);
+
+    const taxisConflitantes = this.listaTurnos
+      .filter(turno => {
+        const inicioExistente = new Date(turno.dataInicio);
+        const fimExistente = new Date(turno.dataFim);
+        return novoInicio < fimExistente && inicioExistente < novoFim;
+      })
+      .map(turno => turno.taxi); // Retorna os táxis dos turnos que intersetam
+    console.log('Táxis com conflitos:', taxisConflitantes);
+    console.log('Táxis todos:', this.listaTaxis);
+    return taxisConflitantes;
   }
 }

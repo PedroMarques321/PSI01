@@ -46,6 +46,7 @@
       type="datetime-local"
       id="dataInicio"
       [(ngModel)]="dataInicioStr"
+      (ngModelChange)="onDateChange()"
       name="dataInicio"
       required
     />
@@ -55,6 +56,7 @@
       type="datetime-local"
       id="dataFim"
       [(ngModel)]="dataFimStr"
+      (ngModelChange)="onDateChange()"
       name="dataFim"
       required
     />
@@ -62,7 +64,7 @@
     <div style="margin-bottom: 10px;">
       <label for="taxiSelect">Selecione o Táxi:</label>
       <select id="taxiSelect" [(ngModel)]="turno.taxi" name="taxi" required>
-        <option *ngFor="let t of listaTaxis" [ngValue]="t">
+        <option *ngFor="let t of listaTaxisDisponiveis" [ngValue]="t">
           {{ t.marca }} {{ t.modelo }} - {{ t.matricula }}
         </option>
       </select>
