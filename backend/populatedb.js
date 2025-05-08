@@ -37,13 +37,14 @@ async function moradaCreate(index, numero_porta, rua, codigo_postal, localidade)
     console.log(`Added morada: ${numero_porta} ${rua} ${codigo_postal} ${localidade}`);
 }
 
-async function taxiCreate(index, modelo, marca, conforto, matricula, ano_de_compra) {
+async function taxiCreate(index, modelo, marca, conforto, matricula, ano_de_compra, lugares) {
     const taxidetail = {
         modelo: modelo,
         marca: marca,
         conforto: conforto,
         matricula: matricula,
         ano_de_compra: ano_de_compra,
+        lugares: lugares,
     };
 
     const taxi = new Taxi(taxidetail);
@@ -101,9 +102,9 @@ async function createPessoas() {
 async function createTaxis() {
     console.log("Creating Taxis");
     await Promise.all([
-        taxiCreate(0, "Prius", "Toyota", "Normal", "38-33-TH", new Date("2018-01-01")),
-        taxiCreate(1, "Classe-E", "Mercedes", "Normal", "15-MF-48", new Date("2017-05-12")),
-        taxiCreate(2, "Prius", "Toyota", "Normal", "00-00-AA", new Date("2019-09-23"))
+        taxiCreate(0, "Prius", "Toyota", "Normal", "38-33-TH", new Date("2018-01-01"), 5),
+        taxiCreate(1, "Classe-E", "Mercedes", "Normal", "15-MF-48", new Date("2017-05-12"), 5),
+        taxiCreate(2, "Prius", "Toyota", "Normal", "00-00-AA", new Date("2019-09-23"), 5)
     ]);
 }
 
