@@ -20,7 +20,7 @@ exports.taxiCreate = asyncHandler(async function(req, res, next) {
     console.log("taxiController(taxiCreate): Creating new taxi");
 
     // Recebe o corpo da requisição que deve ser um objeto taxi em formato JSON
-    const { modelo, marca, conforto, matricula, ano_de_compra } = req.body;
+    const { modelo, marca, conforto, matricula, ano_de_compra, lugares } = req.body;
 
     // Criação de um novo objeto Taxi
     const novoTaxi = new Taxi({
@@ -29,7 +29,8 @@ exports.taxiCreate = asyncHandler(async function(req, res, next) {
         marca,
         conforto,
         matricula,
-        ano_de_compra
+        ano_de_compra,
+        lugares
     });
 
     // Salva o novo taxi na base de dados
