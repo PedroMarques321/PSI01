@@ -23,11 +23,12 @@ export class ClienteComponent {
   novaViagem = {
     sequencia: 1,
     numeroPessoas: 1,
-    clienteIDs: [],
+    clienteID: '',
     periodo: {
       inicio: null,
       fim: null
     },
+    condutorID: '',
     quilometros: 0,
     moradaPartida: '',
     moradaChegada: ''
