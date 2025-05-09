@@ -3,12 +3,14 @@ const Driver = require('./models/motorista');
 const Pessoa = require('./models/pessoa');
 const Morada = require('./models/morada');
 const Price = require('./models/price');
+const Viagem = require('./models/viagem');
 
 var taxis = [];
 var drivers = [];
 var pessoas = [];
 var moradas = [];
 var prices = [];
+var viagens = [];
 
 async function pessoaCreate(index, nif, nome, genero) {
     const pessoadetail = {
@@ -81,6 +83,36 @@ async function priceCreate(index, taxa_normal, taxa_luxo, acrescimo_noturno) {
     console.log(`Added price: ${taxa_normal} ${taxa_luxo} ${acrescimo_noturno}`);
 }
 
+async function viagemCreate(index, sequencia, numeroPessoas, clienteID, data, horaPartida, horaChegadaEstimada, condutorID, taxiID, quilometros, moradaPartida, moradaChegada, preco, tipoServico, estado) {
+    const viagemdetail = {
+        sequencia: sequencia,
+        numeroPessoas: numeroPessoas,
+        clienteID: clienteID,
+        data: data,
+        horaPartida: horaPartida,
+        quilometros: quilometros,
+        moradaPartida: moradaPartida,
+        moradaChegada: moradaChegada,
+        preco: preco,
+        tipoServico: tipoServico,
+        estado: estado,
+    };
+    
+    // Adicionar campos opcionais apenas se não forem nulos
+    if (horaChegadaEstimada) viagemdetail.horaChegadaEstimada = horaChegadaEstimada;
+    if (condutorID) viagemdetail.condutorID = condutorID;
+    if (taxiID) viagemdetail.taxiID = taxiID;
+
+    const viagem = new Viagem(viagemdetail);
+    await viagem.save();
+    console.log(`Added viagem: ${moradaPartida} -> ${moradaChegada}`);
+    
+    // Armazenar a viagem criada no array se necessário
+    if (viagens[index] === undefined) {
+        viagens[index] = viagem;
+    }
+}
+
 async function createMoradas() {
     console.log("Creating Moradas");
     await Promise.all([
@@ -124,26 +156,70 @@ async function createPrices() {
     ]);
 }
 
-async function deleteHeroes() {
-    console.log('Deleting Hero records');
+async function createViagens() {
+    console.log("Creating Viagens");
+    
     try {
-        await Hero.deleteMany({});
-        console.log('Hero records deleted');
-    } catch (err) {
-        console.log('Error deleting Hero records:', err);
+      // Obter táxis existentes
+      const taxis = await Taxi.find({});
+      if (taxis.length === 0) {
+        console.log("Nenhum táxi encontrado para associar às viagens");
+        // Continue sem associar táxi
+      }
+      
+      // Obter pessoas existentes para usar como clientes
+      const pessoas = await Pessoa.find({});
+      if (pessoas.length === 0) {
+        console.log("Nenhuma pessoa encontrada para associar como cliente");
+        return; // Não podemos criar viagens sem clientes
+      }
+      
+      // Criar viagem sem referência a táxi inicialmente
+      await viagemCreate(
+        0, // index
+        1, // sequencia
+        2, // numeroPessoas
+        pessoas[0].nif, // clienteID - usando NIF da primeira pessoa
+        new Date(), // data
+        "14:30", // horaPartida
+        "15:00", // horaChegadaEstimada
+        null, // condutorID - deixando null inicialmente
+        null, // taxiID - deixando null inicialmente
+        10, // quilometros
+        "Rua A, Lisboa", // moradaPartida
+        "Rua B, Lisboa", // moradaChegada
+        15.0, // preco
+        "Normal", // tipoServico
+        "PENDENTE" // estado
+      );
+      
+      // Criar outra viagem se necessário
+      if (pessoas.length > 1) {
+        await viagemCreate(
+          1, // index
+          2, // sequencia
+          1, // numeroPessoas
+          pessoas[1].nif, // clienteID - usando NIF da segunda pessoa
+          new Date(), // data
+          "16:00", // horaPartida
+          "16:30", // horaChegadaEstimada
+          null, // condutorID
+          null, // taxiID
+          5, // quilometros
+          "Avenida da República, Lisboa", // moradaPartida
+          "Praça do Comércio, Lisboa", // moradaChegada
+          8.0, // preco
+          "Normal", // tipoServico
+          "PENDENTE" // estado
+        );
+      }
+      
+      console.log("Viagens criadas com sucesso");
+    } catch (error) {
+      console.error("Erro ao criar viagens:", error);
+      throw error; // Propagar o erro para tratamento adequado
     }
-    console.log('Heroes deleted');
-}
-
-async function deletePets(){
-    console.log('Deleting Pet records');
-    try {
-        await Pet.deleteMany({});
-        console.log('Pet records deleted');
-    } catch (err) {
-        console.log('Error deleting Pet records:', err);
-    }
-}
+  }
 
 async function deleteMoradas(){
     console.log('Deleting Morada records');
@@ -196,17 +272,27 @@ async function deletePrices() {
     }
 }
 
+async function deleteViagens() {
+    console.log('Deleting Viagem records');
+    try {
+        await Viagem.deleteMany({});
+        console.log('Viagem records deleted');
+    } catch (err) {
+        console.log('Error deleting Viagem records:', err);
+    }
+}
+
 module.exports = {
     createTaxis,
     createMoradas,
     createPessoas,
     createDrivers,
     createPrices,
-    deleteHeroes,
-    deletePets,
+    createViagens,
     deleteTaxis,
     deleteMoradas,
     deletePessoas,
     deleteDrivers,
-    deletePrices
+    deletePrices,
+    deleteViagens
 }
