@@ -10,6 +10,7 @@ import { Viagem, EstadoPedido } from './viagem';
 export class ViagemService {
 
   private viagensUrl = 'http://localhost:3000/dashboard/viagens';
+  private viagemUrl = 'http://localhost:3000/dashboard/viagem';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -25,14 +26,14 @@ export class ViagemService {
 
   // Obter uma viagem por ID
   getViagem(id: string): Observable<Viagem> {
-    const url = `${this.viagensUrl}/${id}`;
+    const url = `${this.viagemUrl}/${id}`;
     return this.http.get<Viagem>(url).pipe(catchError(this.handleError<Viagem>(`getViagem id=${id}`)));
   }
 
   // Criar uma nova viagem
   postViagem(viagem: Viagem): Observable<Viagem> {
     console.log('postViagem called');
-    return this.http.post<Viagem>(this.viagensUrl, viagem, this.httpOptions)
+    return this.http.post<Viagem>(this.viagemUrl, viagem, this.httpOptions)
       .pipe(
         tap(newViagem => {
           console.log('New viagem added:', newViagem);
