@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ViagemService } from '../viagem.service';
+import { Viagem, EstadoPedido } from '../viagem';
 
 @Component({
   selector: 'app-cliente',
@@ -14,7 +16,7 @@ export class ClienteComponent {
   mostrarFormularioCliente: boolean = true;
   cliente = {
     pessoa: {
-      nif: null,
+      nif: '',
       nome: '',
       genero: true
     }
@@ -52,6 +54,8 @@ export class ClienteComponent {
     moradaChegada: ''
   };
 
+  constructor(private viagemService: ViagemService) { }
+
   ngOnInit(): void {
     this.obterLocalizacaoAtual();
   }
@@ -73,11 +77,27 @@ export class ClienteComponent {
       return;
     }
 
+    const viagemParaEnviar = {
+      ...this.novaViagem,
+      clienteID: this.cliente.pessoa.nif,
+      data: new Date(),
+      estado: EstadoPedido.PENDENTE
+    }
+    
+    this.viagemService.postViagem(viagemParaEnviar).subscribe(
+      (viagem) => {
+        console.log('Viagem criada:', viagem);
+      },
+      (error) => {
+        console.error('Erro ao criar viagem:', error);
+      }
+    );
+
     const pessoaCriada = { ...this.cliente.pessoa };
     const clienteCriado = { pessoaID: null };
     const viagemCriada = {
       ...this.novaViagem,
-      clienteIDs: []
+      clienteIDs: [clienteCriado]
     };
 
     console.log('Pessoa (sem ID):', pessoaCriada);
