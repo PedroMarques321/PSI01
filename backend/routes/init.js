@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { deleteTaxis, deleteMoradas, deletePessoas, deleteDrivers, deletePrices, createTaxis, createMoradas, createPessoas, createDrivers, createPrices } = require('../populatedb');
+const { deleteTaxis, deleteMoradas, deletePessoas, deleteDrivers, deletePrices, deleteViagens, createTaxis, createMoradas, createPessoas, createDrivers, createPrices, createViagens } = require('../populatedb');
 const Price = require("../models/price");
 const Driver = require("../models/driver");
 const Taxi = require("../models/taxi");
 const Morada = require("../models/morada");
 const Pessoa = require("../models/pessoa");
+const Viagem = require("../models/viagem");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 
-const mongoDB = "mongodb+srv://diogo:psi01@cluster0.sacvmdg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-
+const mongoDB = "mongodb+srv://pedromarques2881997:dSjSww1uXxE6sbJP@cluster0.tj7cu.mongodb.net/local_library?retryWrites=true&w=majority&appName=Cluster0";
   
   // We pass the index to the ...Create functions so that, for example,
   // genre[0] will always be the Fantasy genre, regardless of the order
@@ -27,9 +27,9 @@ router.get('/', async (req, res) => {
       const taxisCount = await Taxi.countDocuments();
       const moradasCount = await Morada.countDocuments();
       const pessoasCount = await Pessoa.countDocuments();
+      const viagensCount = await Viagem.countDocuments();
 
-
-      if (pricesCount > 0 || driversCount > 0 || taxisCount > 0 || moradasCount > 0 || pessoasCount > 0){
+      if (pricesCount > 0 || driversCount > 0 || taxisCount > 0 || moradasCount > 0 || pessoasCount > 0 || viagensCount > 0){
 
         // Delete current records
         console.log("Deleting current records...");
@@ -38,7 +38,8 @@ router.get('/', async (req, res) => {
           deleteMoradas(),
           deletePessoas(),
           deleteDrivers(),
-          deletePrices()
+          deletePrices(),
+          deleteViagens()
         ]);
 
         // Create new records
@@ -48,11 +49,12 @@ router.get('/', async (req, res) => {
           createMoradas(),
           createPessoas(),
           createDrivers(),
-          createPrices()
+          createPrices(),
+          createViagens()
         ]);
       }
 
-      if(pricesCount === 0 && driversCount === 0 && taxisCount === 0 && moradasCount === 0 && pessoasCount === 0){
+      if(pricesCount === 0 && driversCount === 0 && taxisCount === 0 && moradasCount === 0 && pessoasCount === 0 && viagensCount === 0){
         // Create new records
         console.log("Creating database records...");
         await Promise.all([
@@ -60,7 +62,8 @@ router.get('/', async (req, res) => {
           createMoradas(),
           createPessoas(),
           createDrivers(),
-          createPrices()
+          createPrices(),
+          createViagens()
         ]);
       }
       
