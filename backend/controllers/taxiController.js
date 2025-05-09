@@ -16,6 +16,7 @@ exports.taxisGetAll = asyncHandler(async function(req, res, next) {
     res.json(taxis);
 });
 
+// Handle Taxi POST
 exports.taxiCreate = asyncHandler(async function(req, res, next) {
     console.log("taxiController(taxiCreate): Creating new taxi");
 
