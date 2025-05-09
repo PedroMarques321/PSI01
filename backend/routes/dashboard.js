@@ -22,11 +22,16 @@ router.put("/prices", pricecontroller.pricesPut);
 const viagemcontroller = require("../controllers/viagemController");
 
 // Viagem endpoints
-router.get("/viagens", viagemcontroller.viagemGetAll); // Listar todas as viagens
+router.get("/viagens", viagemcontroller.viagensGetAll); // Listar todas as viagens
 router.get("/viagem/:id", viagemcontroller.viagemGetById); // Obter viagem por ID
 router.post("/viagem", viagemcontroller.viagemCreate); // Criar nova viagem
-router.put("/viagem/:id", viagemcontroller.viagemUpdate); // Atualizar viagem existente
-router.delete("/viagem/:id", viagemcontroller.viagemDelete); // Excluir viagem existente
+router.put("/viagem/aceitar/:id", viagemcontroller.viagemAceitar); // Atualizar viagem existente
+router.put("/viagem/rejeitar/:id", viagemcontroller.viagemRejeitar); // Atualizar viagem existente
+router.put("/viagem/cancelar/:id", viagemcontroller.viagemCancelar); // Atualizar viagem existente
+router.put("/viagem/concluir/:id", viagemcontroller.viagemConcluir); // Atualizar viagem existente
+router.put("/viagem/pendente/:id", viagemcontroller.viagemPendente); // Atualizar viagem existente
+
+//router.delete("/viagem/:id", viagemcontroller.viagemDelete); // Excluir viagem existente
 
 const turnocontroller = require("../controllers/turnoController");
 
