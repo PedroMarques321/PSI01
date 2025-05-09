@@ -3,13 +3,30 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const viagemSchema = new schema({
+    _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
     sequencia: { type: Number, required: true },
     numeroPessoas: { type: Number, required: true },
     clienteID: { type: String, required: true },
-    periodo: { type: Object, required: true },
-    condutorID: { type: String, required: true },
+    data: { type: Date, required: true },
+    horaPartida: { type: String, required: true },
+    horaChegadaEstimada: { type: String, required: false },
+    condutorID: { type: String, required: false },
+    taxiID: { type: mongoose.Schema.Types.ObjectId, ref: 'Taxi', required: false },
     quilometros: { type: Number, required: true },
     moradaPartida: { type: String, required: true },
     moradaChegada: { type: String, required: true },
-    estado: { type: String, enum: ['PENDENTE', 'ACEITE', 'REJEITADO', 'CANCELADO'], required: true }
+    preco: { type: Number, required: true },
+    tipoServico: { type: String, enum: ['Normal', 'Luxo'], required: true },
+    estado: { 
+        type: String, 
+        enum: ['PENDENTE', 'ACEITE', 'REJEITADO', 'CANCELADO', 'CONCLUIDO'], 
+        required: true,
+        default: 'PENDENTE'
+    }
 });
+
+viagemSchema.virtual('url').get(function() {
+    return '/viagens/viagem' + this._id;
+});
+
+module.exports = mongoose.model("Viagem", viagemSchema);
