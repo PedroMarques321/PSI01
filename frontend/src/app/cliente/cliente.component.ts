@@ -21,6 +21,24 @@ export class ClienteComponent {
   };
 
   novaViagem = {
+    _id: null,
+    sequencia: 1,
+    numeroPessoas: 1,
+    clienteID: '',
+    data: null,
+    horaPartida: '',
+    horaChegadaEstimada: '',
+    condutorID: '',
+    taxiID: '',
+    quilometros: 0,
+    moradaPartida: '',
+    moradaChegada: '',
+    preco: 0,
+    tipoServico: 'Normal',
+    estado: 'PENDENTE'
+  }
+
+  novaViagem2 = {
     sequencia: 1,
     numeroPessoas: 1,
     clienteID: '',
