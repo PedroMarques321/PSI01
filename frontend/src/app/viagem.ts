@@ -4,7 +4,7 @@ export interface Viagem {
   numeroPessoas: number;
   clienteID: string;
   data: Date;                // Data da viagem
-  horaPartida: string;       // Hora solicitada pelo cliente
+  horaPartida?: string;       // Hora solicitada pelo cliente
   horaChegadaEstimada?: string; // Opcional, estimativa
   condutorID?: string;       // Opcional, preenchido quando aceito
   taxiID?: string;           // Opcional, preenchido quando aceito
