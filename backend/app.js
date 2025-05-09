@@ -8,17 +8,18 @@ var cors = require('cors');
 var indexRouter = require('./routes/index');
 var dashboardRouter = require('./routes/dashboard');
 var initRouter = require('./routes/init');
+var pedidosRouter = require('./routes/pedidos');
 
+var app = express(); 
 
-var app = express();
-
+/**
 const mongoose = require('mongoose');
 mongoose.connect("mongodb://localhost:27017/webtaxi").then(() => {
   console.log("Ligado à base de dados MongoDB");
 }).catch((err) => {
     console.error("Erro na ligação à base de dados:", err);
 });
-
+*/
 // CORS
 app.use(cors());
 
@@ -35,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/init', initRouter);    
-
+app.use('/pedidos', pedidosRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

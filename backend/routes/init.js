@@ -9,7 +9,7 @@ const Pessoa = require("../models/pessoa");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 
-const mongoDB = "mongodb+srv://pedromarques2881997:dSjSww1uXxE6sbJP@cluster0.tj7cu.mongodb.net/local_library?retryWrites=true&w=majority&appName=Cluster0";
+const mongoDB = "mongodb+srv://diogo:psi01@cluster0.sacvmdg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
   
   // We pass the index to the ...Create functions so that, for example,
@@ -17,7 +17,7 @@ const mongoDB = "mongodb+srv://pedromarques2881997:dSjSww1uXxE6sbJP@cluster0.tj7
   // in which the elements of promise.all's argument complete.
 
 
-router.get('/', async (req, res) => {/**
+router.get('/', async (req, res) => {
     try {
       console.log("init.js: Initializing database...");
       await mongoose.connect(mongoDB);
@@ -69,7 +69,7 @@ router.get('/', async (req, res) => {/**
     } catch (err) {
       console.error('Error initializing database:', err);
       res.status(500).json({ message: 'Internal server error' });
-    }*/
+    }
   });
 
   module.exports = router;
