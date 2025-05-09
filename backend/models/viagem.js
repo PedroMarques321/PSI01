@@ -8,7 +8,7 @@ const viagemSchema = new schema({
     numeroPessoas: { type: Number, required: true },
     clienteID: { type: String, required: true },
     data: { type: Date, required: true },
-    horaPartida: { type: String, required: true },
+    horaPartida: { type: String, required: false },
     horaChegadaEstimada: { type: String, required: false },
     condutorID: { type: String, required: false },
     taxiID: { type: mongoose.Schema.Types.ObjectId, ref: 'Taxi', required: false },
