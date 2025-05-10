@@ -10,6 +10,8 @@ import { Viagem, EstadoPedido } from '../viagem';
 })
 export class ClienteComponent {
 
+  private intervaloId: any = null;
+  loading: boolean = false;
   longitude: number = 0;
   latitude: number = 0;
 
@@ -83,7 +85,7 @@ export class ClienteComponent {
       data: new Date(),
       estado: EstadoPedido.PENDENTE
     }
-    
+
     this.viagemService.postViagem(viagemParaEnviar).subscribe(
       (viagem) => {
         console.log('Viagem criada:', viagem);
@@ -100,12 +102,77 @@ export class ClienteComponent {
       clienteIDs: [clienteCriado]
     };
 
+
+
     console.log('Pessoa (sem ID):', pessoaCriada);
     console.log('Cliente (sem ID):', clienteCriado);
     console.log('Viagem (sem ID):', viagemCriada);
 
+    this.startFetchingViagem(this.cliente.pessoa.nif);
   }
 
+// Método para chamar o getViagemByNif a cada 2 segundos
+startFetchingViagem(nif: string): void {
+  this.fetchViagemByNif(nif);  // chamada inicial
+
+  // Guarda a referência do intervalo
+  this.intervaloId = setInterval(() => {
+    this.fetchViagemByNif(nif);
+  }, 2000);
+}
+
+fetchViagemByNif(nif: string): void {
+  this.loading = true;
+
+  this.viagemService.getViagemByNif(nif).subscribe(
+    (viagem) => {
+      console.log('Viagem encontrada pelo NIF:', viagem);
+
+      if (viagem.estado === EstadoPedido.ACEITE) {
+         this.stopFetchingViagem();
+         this.loading = false;
+      }
+    },
+    (error) => {
+      this.loading = false;
+      console.error('Erro ao buscar viagem pelo NIF:', error);
+    }
+  );
+}
+
+stopFetchingViagem(): void {
+  if (this.intervaloId) {
+    clearInterval(this.intervaloId);
+    this.intervaloId = null;
+    console.log('Intervalo parado');
+  }
+}
+
+ cancelarViagem(): void {
+   const nif = this.cliente.pessoa.nif;
+
+   this.viagemService.getViagemByNif(nif).subscribe(
+     (viagem) => {
+       if (viagem && viagem._id) {
+         this.viagemService.cancelarViagem(viagem._id).subscribe(
+           (res) => {
+             console.log('Viagem cancelada com sucesso:', res);
+             this.stopFetchingViagem(); // para o intervalo de polling
+             this.loading = false;
+           },
+           (err) => {
+             console.error('Erro ao cancelar viagem:', err);
+           }
+         );
+       } else {
+         console.warn('Nenhuma viagem encontrada para cancelar.');
+       }
+     },
+     (error) => {
+       console.error('Erro ao buscar viagem para cancelamento:', error);
+     }
+   );
+ }
 
   gerarId(): string {
     return Math.random().toString(36).substr(2, 9);

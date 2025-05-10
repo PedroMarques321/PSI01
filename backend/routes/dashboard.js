@@ -30,6 +30,7 @@ router.put("/viagem/rejeitar/:id", viagemcontroller.viagemRejeitar); // Atualiza
 router.put("/viagem/cancelar/:id", viagemcontroller.viagemCancelar); // Atualizar viagem existente
 router.put("/viagem/concluir/:id", viagemcontroller.viagemConcluir); // Atualizar viagem existente
 router.put("/viagem/pendente/:id", viagemcontroller.viagemPendente); // Atualizar viagem existente
+router.get("/viagemNif/:nif", viagemcontroller.viagemGetByClienteId); //Obter viagem pelo nif do criador
 
 //router.delete("/viagem/:id", viagemcontroller.viagemDelete); // Excluir viagem existente
 

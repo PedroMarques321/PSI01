@@ -29,6 +29,22 @@ exports.viagemGetById = asyncHandler(async function(req, res, next) {
     res.json(viagem);
 });
 
+// Handle Viagem GET by clienteID (NIF)
+exports.viagemGetByClienteId = asyncHandler(async function(req, res, next) {
+    const clienteNif = req.params.nif; // ou req.query.nif, dependendo da rota
+
+    console.log("viagemController(viagemGetByClienteId): Buscando viagem por clienteID (NIF):", clienteNif);
+
+    const viagem = await Viagem.findOne({ clienteID: clienteNif }).sort({ data: 1 }); // Retorna a mais antiga
+
+    if (!viagem) {
+        res.status(404);
+        throw new Error("viagemController(viagemGetByClienteId): Nenhuma viagem encontrada para esse clienteID");
+    }
+
+    res.json(viagem);
+});
+
 // Handle Viagem POST
 exports.viagemCreate = asyncHandler(async function(req, res, next) {
     console.log("viagemController(viagemCreate): Criando nova viagem");

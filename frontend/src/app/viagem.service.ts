@@ -11,7 +11,6 @@ export class ViagemService {
 
   private viagensUrl = 'http://localhost:3000/dashboard/viagens';
   private viagemUrl = 'http://localhost:3000/dashboard/viagem';
-
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
@@ -53,6 +52,23 @@ export class ViagemService {
         catchError(this.handleError<Viagem>('putViagem'))
       );
   }
+  //Get viagem pelo nif do cliente que fez o pedido
+  getViagemByNif(nif: string): Observable<Viagem> {
+    const url = `http://localhost:3000/dashboard/viagemNif/${nif}`;
+    return this.http.get<Viagem>(url)
+      .pipe(catchError(this.handleError<Viagem>('getViagemByNif')));
+  }
+
+  cancelarViagem(id: string): Observable<Viagem> {
+    const url = `http://localhost:3000/dashboard/viagem/cancelar/${id}`;
+    return this.http.put<Viagem>(url, null, this.httpOptions).pipe(
+      tap(cancelada => {
+        console.log('Viagem cancelada:', cancelada);
+      }),
+      catchError(this.handleError<Viagem>('cancelarViagem'))
+    );
+  }
+
 
   /** Tratamento de erro */
   private handleError<T>(operation = 'operation', result?: T) {

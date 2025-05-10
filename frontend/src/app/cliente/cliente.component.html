@@ -42,3 +42,8 @@
     <button type="submit">Submeter Pedido</button>
   </form>
 </div>
+<div *ngIf="loading" class="loading-spinner">
+  <img src="assets/loading.gif" alt="Loading..."> <!-- ou use um ícone de carregamento -->
+  <p>A procurar de motorista...</p>
+  <button (click)="cancelarViagem()" class="btn-cancelar">Cancelar pedido</button>
+</div>
