@@ -94,12 +94,37 @@ exports.viagemCreate = asyncHandler(async function(req, res, next) {
     }
 });
 
-// Atualizar estado da viagem para ACEITE
 exports.viagemAceitar = asyncHandler(async function(req, res, next) {
     console.log("viagemController(viagemAceitar): A aceitar viagem");
-    const viagem = await Viagem.findById(req.params.id);
+
+    const viagemId = req.params.id;  // ID da viagem recebido pela URL
+    const motoristaId = req.params.motoristaId;  // Motorista ID recebido pela URL
+    const taxiId = req.params.taxiId;  // Taxi ID recebido pela URL
+    const distCM = req.params.distCM;
+    const quilometros = req.params.quilometros;
+
+    // Verificar se os parâmetros motoristaId e taxiId foram fornecidos
+    if (!motoristaId || !taxiId) {
+        return res.status(400).json({ message: "Motorista ID e Taxi ID são obrigatórios." });
+    }
+
+    // Encontrar a viagem no banco de dados usando o ID fornecido
+    const viagem = await Viagem.findById(viagemId);
+    if (!viagem) {
+        return res.status(404).json({ message: "Viagem não encontrada." });
+    }
+
+    // Atualizar a viagem com os dados recebidos
     viagem.estado = 'ACEITE';
+    viagem.condutorID = motoristaId;  // Atualiza o campo condutorID
+    viagem.taxiID = taxiId;  // Atualiza o campo taxiID
+    viagem.distClienteMotorista = distCM;
+    viagem.quilometros = quilometros;
+
+    // Salvar a viagem no banco de dados
     await viagem.save();
+
+    // Retornar a viagem atualizada como resposta
     res.json(viagem);
 });
 

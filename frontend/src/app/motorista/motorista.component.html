@@ -77,19 +77,47 @@
       Confirmar Turno
     </button>
   </div>
+
+  <!-- Lista de turnos -->
+  <div *ngIf="listaTurnos.length > 0" style="margin-top: 20px;">
+    <h3>Lista de Turnos Confirmados</h3>
+    <ul>
+      <li *ngFor="let turno of listaTurnosMotorista">
+        <p><strong>Motorista:</strong> {{ turno.motorista.pessoa.nome }} (NIF: {{ turno.motorista.pessoa.nif }})</p>
+        <p><strong>Táxi:</strong> {{ turno.taxi.marca }} {{ turno.taxi.modelo }} - {{ turno.taxi.matricula }}</p>
+        <p><strong>Início:</strong> {{ turno.dataInicio | date: 'dd/MM/yyyy HH:mm' }}</p>
+        <p><strong>Fim:</strong> {{ turno.dataFim | date: 'dd/MM/yyyy HH:mm' }}</p>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Lista de Viagens -->
+  <div *ngIf="viagensOrdenadas.length > 0 && verificarSeEmTurnoAtual()" style="margin-top: 30px;">
+    <h3>Lista de Viagens</h3>
+    <ul>
+      <li *ngFor="let v of viagensOrdenadas">
+        <!--<p><strong>ID:</strong> {{ v._id }}</p>-->
+        <!--<p><strong>Data:</strong> {{ v.data | date: 'dd/MM/yyyy' }}</p>-->
+        <!--<p><strong>Hora de Partida:</strong> {{ v.horaPartida || 'N/A' }}</p>-->
+        <!-- <p><strong>Hora Estimada de Chegada:</strong> {{ v.horaChegadaEstimada || 'N/A' }}</p>-->
+        <p><strong>Distância ao Cliente: </strong> {{v.distClienteMotorista}} km</p>
+        <p><strong>Morada de Partida:</strong> {{ v.moradaPartida }}</p>
+        <p><strong>Morada de Chegada:</strong> {{ v.moradaChegada }}</p>
+        <p><strong>Nº pessoas: </strong>{{v.numeroPessoas}}</p>
+        <!--<p><strong>Preço:</strong> {{ v.preco | currency:'EUR' }}</p>-->
+        <!--<p><strong>Tipo de Serviço:</strong> {{ v.tipoServico }}</p>-->
+        <!--<p><strong>Estado:</strong> {{ v.estado }}</p>-->
+
+        <div *ngIf="v.estado === 'PENDENTE'">
+          <button *ngIf="v._id" (click)="aceitarPedido(v._id!,v.distClienteMotorista ?? 0, v.quilometros ?? 0)">Aceitar</button>
+        </div>
+        <div *ngIf="v.estado === 'ACEITE'"><p>Pedido Aceite!</p> </div>
+
+        <hr />
+      </li>
+    </ul>
+  </div>
 </div>
 
-<!-- Lista de turnos -->
-<div *ngIf="listaTurnos.length > 0" style="margin-top: 20px;">
-  <h3>Lista de Turnos Confirmados</h3>
-  <ul>
-    <li *ngFor="let turno of listaTurnosMotorista">
-      <p><strong>Motorista:</strong> {{ turno.motorista.pessoa.nome }} (NIF: {{ turno.motorista.pessoa.nif }})</p>
-      <p><strong>Táxi:</strong> {{ turno.taxi.marca }} {{ turno.taxi.modelo }} - {{ turno.taxi.matricula }}</p>
-      <p><strong>Início:</strong> {{ turno.dataInicio | date: 'dd/MM/yyyy HH:mm' }}</p>
-      <p><strong>Fim:</strong> {{ turno.dataFim | date: 'dd/MM/yyyy HH:mm' }}</p>
-    </li>
-  </ul>
-</div>
 
 

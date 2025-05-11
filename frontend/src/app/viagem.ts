@@ -8,12 +8,14 @@ export interface Viagem {
   horaChegadaEstimada?: string; // Opcional, estimativa
   condutorID?: string;       // Opcional, preenchido quando aceito
   taxiID?: string;           // Opcional, preenchido quando aceito
-  quilometros: number;
+  motoristaID?: string;      // Opcional, preenchido quando aceito
+  quilometros: number | null;
   moradaPartida: string;
   moradaChegada: string;
   preco: number;             // Preço estimado ou final
   tipoServico: string;       // 'Normal' ou 'Luxo'
   estado: EstadoPedido;
+  distClienteMotorista?: number | null;
 }
 
 export enum EstadoPedido {

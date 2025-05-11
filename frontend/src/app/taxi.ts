@@ -1,5 +1,5 @@
 export interface Taxi {
-  _id: String | null,
+  _id?: string | null,
   modelo : string,
   marca : string,
   conforto: string,

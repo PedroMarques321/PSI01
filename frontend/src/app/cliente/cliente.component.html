@@ -47,3 +47,36 @@
   <p>A procurar de motorista...</p>
   <button (click)="cancelarViagem()" class="btn-cancelar">Cancelar pedido</button>
 </div>
+
+<div *ngIf="viagemAceite">
+  <h3>Pedido aceite</h3>
+  <p><strong>Origem:</strong> {{ viagemAceite.moradaPartida }}</p>
+  <p><strong>Destino:</strong> {{ viagemAceite.moradaChegada }}</p>
+
+  <div *ngIf="motoristaAceite">
+    <p><strong>Motorista:</strong> {{ motoristaAceite.pessoa.nome }}</p>
+    <p><strong>Distância até ao cliente:</strong> {{ viagemAceite.distClienteMotorista?.toFixed(2) }} km</p>
+    <p><strong>Tempo estimado de chegada:</strong> {{ tempoEstimadoClienteMinutos }} min</p>
+  </div>
+
+  <div *ngIf="taxiAceite">
+    <h4><strong>Detalhes do Táxi</strong></h4>
+    <p><strong>Matrícula:</strong> {{ taxiAceite.matricula }}</p>
+    <p><strong>Marca:</strong> {{ taxiAceite.marca }}</p>
+    <p><strong>Modelo:</strong> {{ taxiAceite.modelo }}</p>
+    <p><strong>Capacidade:</strong> {{ taxiAceite.lugares }} pessoas</p>
+
+    <!-- Condicional para exibir preço -->
+    <div *ngIf="taxiAceite.conforto === 'Normal'">
+      <p><strong>Preço Final Normal:</strong> {{ precoFinalNormal | currency }}</p>
+    </div>
+    <div *ngIf="taxiAceite.conforto !== 'Normal'">
+      <p><strong>Preço Final Luxo:</strong> {{ precoFinalLuxo | currency }}</p>
+    </div>
+  </div>
+
+  <div class="botoes">
+    <button (click)="aceitarMotorista()">Aceitar Motorista</button>
+    <button (click)="rejeitarMotorista()">Rejeitar Motorista</button>
+  </div>
+</div>

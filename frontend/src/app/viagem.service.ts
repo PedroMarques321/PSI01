@@ -69,6 +69,18 @@ export class ViagemService {
     );
   }
 
+  aceitarViagem(viagemId: string, motoristaId: string, taxiId: string, distCM: number, quilometros: number): Observable<Viagem> {
+    const url = `http://localhost:3000/dashboard/viagem/aceitar/${viagemId}/${motoristaId}/${taxiId}/${distCM}/${quilometros}`;
+
+    return this.http.put<Viagem>(url, this.httpOptions)
+      .pipe(
+        tap((viagem) => {
+          console.log('Viagem aceite:', viagem);
+        }),
+        catchError(this.handleError<Viagem>('aceitarViagem'))
+      );
+  }
+
 
   /** Tratamento de erro */
   private handleError<T>(operation = 'operation', result?: T) {

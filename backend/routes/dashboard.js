@@ -25,7 +25,10 @@ const viagemcontroller = require("../controllers/viagemController");
 router.get("/viagens", viagemcontroller.viagensGetAll); // Listar todas as viagens
 router.get("/viagem/:id", viagemcontroller.viagemGetById); // Obter viagem por ID
 router.post("/viagem", viagemcontroller.viagemCreate); // Criar nova viagem
-router.put("/viagem/aceitar/:id", viagemcontroller.viagemAceitar); // Atualizar viagem existente
+router.put('/viagem/aceitar/:id/:motoristaId/:taxiId/:distCM/:quilometros', (req, res, next) => {
+  console.log('Requisição para aceitar viagem recebida');
+  next();
+}, viagemcontroller.viagemAceitar);
 router.put("/viagem/rejeitar/:id", viagemcontroller.viagemRejeitar); // Atualizar viagem existente
 router.put("/viagem/cancelar/:id", viagemcontroller.viagemCancelar); // Atualizar viagem existente
 router.put("/viagem/concluir/:id", viagemcontroller.viagemConcluir); // Atualizar viagem existente

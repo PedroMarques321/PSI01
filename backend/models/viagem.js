@@ -10,7 +10,7 @@ const viagemSchema = new schema({
     data: { type: Date, required: true },
     horaPartida: { type: String, required: false },
     horaChegadaEstimada: { type: String, required: false },
-    condutorID: { type: String, required: false },
+    condutorID: { type: mongoose.Schema.Types.ObjectId, ref: 'Motorista', required: false },
     taxiID: { type: mongoose.Schema.Types.ObjectId, ref: 'Taxi', required: false },
     quilometros: { type: Number, required: true },
     moradaPartida: { type: String, required: true },
@@ -22,7 +22,8 @@ const viagemSchema = new schema({
         enum: ['PENDENTE', 'ACEITE', 'REJEITADO', 'CANCELADO', 'CONCLUIDO'], 
         required: true,
         default: 'PENDENTE'
-    }
+    },
+    distClienteMotorista: { type: Number, required: false, default: null }
 });
 
 viagemSchema.virtual('url').get(function() {

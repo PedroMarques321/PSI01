@@ -2,10 +2,15 @@ import { Component } from '@angular/core';
 import { TaxisService } from '../taxis.service';
 import { DriverService } from '../driver.service';
 import { TurnosService } from '../turnos.service';
+import { ViagemService } from '../viagem.service';
 import { Pessoa, Genero } from '../pessoa';
 import { Motorista } from '../motorista';
 import { Taxi } from '../taxi';
 import { Turno } from '../turno';
+import { Viagem } from '../viagem';
+import { EstadoPedido } from '../viagem';
+import { OnInit, OnDestroy } from '@angular/core';
+import { Subscription, interval } from 'rxjs';
 
 @Component({
   selector: 'app-motorista',
@@ -13,13 +18,28 @@ import { Turno } from '../turno';
   templateUrl: './motorista.component.html',
   styleUrl: './motorista.component.scss'
 })
-export class MotoristaComponent {
+export class MotoristaComponent implements OnInit, OnDestroy {
+
+  private viagensSubscription: Subscription | undefined;
+
+  moradaFcul: string = "Faculdade de Ciências da Universidade de Lisboa, Campo Grande, Alvalade, Lisboa, 1749-016, Portugal";
+  fculCoordLatitude: number = 38.756734;
+  fculCoordLongitude: number = -9.155412;
+
+  partidaCoordLatitude: number = 0;
+  partidaCoordLongitude: number = 0;
+
+  destinoCoordLatitude: number = 0;
+  destinoCoordLongitude: number = 0;
 
   listaDrivers: Motorista[] = [];
   listaTaxis: Taxi[] = [];
   listaTaxisDisponiveis: Taxi[] = [];
   listaTurnos: Turno[] = [];
   listaTurnosMotorista: Turno[] = [];
+  viagens: Viagem[] = [];
+  viagensOrdenadas: Viagem[] = [];
+
   loading = false;
   errorMessage = '';
   dataInicioStr: string = '';
@@ -39,8 +59,9 @@ export class MotoristaComponent {
 
   constructor(
     private taxisService: TaxisService,
-    private  driverService: DriverService,
-    private turnosService: TurnosService
+    private driverService: DriverService,
+    private turnosService: TurnosService,
+    private viagemService: ViagemService
   ) {}
 
   confirmarLogin() {
@@ -65,6 +86,13 @@ export class MotoristaComponent {
       this.getTaxis();
       this.getDrivers();
       this.getTurnos();
+
+      // Executa getViagens a cada 3 segundos
+      this.viagensSubscription = interval(20000).subscribe(() => {
+         this.getViagens();
+      });
+
+      this.getViagens();
   }
 
   getDrivers(): void {
@@ -115,6 +143,35 @@ export class MotoristaComponent {
       );
   }
 
+  getViagens(): void {
+    this.viagemService.getViagens().subscribe(async (viagens) => {
+      const viagensPendentes = viagens.filter(
+        v => v.estado === EstadoPedido.PENDENTE || v.estado === EstadoPedido.ACEITE
+      );
+
+      for (const viagem of viagensPendentes) {
+        // Adiciona distância cliente-motorista
+        let distanciaClienteMotorista = await this.calcularDistanciaEntreMoradas(
+          this.moradaFcul,
+          viagem.moradaPartida
+        );
+        viagem.distClienteMotorista = distanciaClienteMotorista;
+        console.log('A distancia entre cliente e motorista é ', viagem.distClienteMotorista);
+        // Adiciona as distâncias a cada viagem
+        let distancia = await this.calcularDistanciaEntreMoradas(
+          viagem.moradaPartida,
+          viagem.moradaChegada
+        );
+        viagem.quilometros = distancia; // adiciona nova propriedade à viagem
+        console.log('A distancia entre chegada e partida é ', viagem.quilometros);
+      }
+
+      this.viagens = viagensPendentes;
+      this.ordenarViagensPorDistanciaClienteMotorista(this.viagens, this.viagensOrdenadas);
+      console.log ('Viagens ordenadas : ', this.viagensOrdenadas);
+    });
+  }
+
   nifValido(): boolean {
       // Verifica se contém apenas dígitos
       const formatoValido = /^[0-9]{9}$/.test(this.nifSelecionado);
@@ -158,7 +215,7 @@ export class MotoristaComponent {
         taxi: JSON.parse(JSON.stringify(this.turno.taxi))            // cópia profunda
       };
 
-        this.listaTurnos.push(novoTurno);
+        this.listaTurnosMotorista.push(novoTurno);
     }
   }
 
@@ -203,7 +260,6 @@ export class MotoristaComponent {
   }
 
   verificarTurnoTaxisExistente(): Taxi[] {
-    console.log('hey');
     if (!this.dataInicioStr || !this.dataFimStr) return [];
 
     const novoInicio = new Date(this.dataInicioStr);
@@ -226,4 +282,139 @@ export class MotoristaComponent {
         turno.motorista.pessoa.nif === this.motoristaLogado?.pessoa.nif
       );
   }
+
+  haversineDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371; // Raio da Terra em km
+
+    const toRadians = (deg: number) => deg * Math.PI / 180;
+
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+      Math.sin(dLon / 2) ** 2;
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const distancia = R * c;
+    return distancia; // em km
+  }
+
+  async obterCoordenadasPorEndereco(endereco: string): Promise<{ lat: number; lon: number } | null> {
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(endereco)}&format=json&addressdetails=1&limit=1`;
+
+    try {
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'MeuAppExemplo/1.0 (meuemail@example.com)'
+        }
+      });
+
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        const resultado = data[0];
+        const lat = parseFloat(resultado.lat);
+        const lon = parseFloat(resultado.lon);
+        console.log('Coordenadas:', lat, lon);
+        console.log('Endereço:', resultado.display_name);
+
+        return { lat, lon };
+      } else {
+        console.warn('Endereço não encontrado.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Erro na geocodificação:', error);
+      return null;
+    }
+  }
+
+  async calcularDistanciaEntreMoradas(moradaPartida: string, moradaChegada: string): Promise<number | null> {
+    const coordsPartida = await this.obterCoordenadasPorEndereco(moradaPartida);
+    const coordsChegada = await this.obterCoordenadasPorEndereco(moradaChegada);
+
+    if (!coordsPartida || !coordsChegada) {
+      console.warn('Coordenadas não encontradas para uma ou ambas as moradas.');
+      return null;
+    }
+
+    const distancia = this.haversineDistance(
+      coordsPartida.lat,
+      coordsPartida.lon,
+      coordsChegada.lat,
+      coordsChegada.lon
+    );
+
+    console.log(`Distância entre as moradas: ${distancia.toFixed(2)} km`);
+    return distancia;
+  }
+
+  ordenarViagensPorDistanciaClienteMotorista(viagens: Viagem[], viagensOrdenadas: Viagem[]): void {
+    // Filtra apenas as que têm distClienteMotorista definido (evita undefined)
+    const viagensFiltradas = viagens.filter(v => typeof v.distClienteMotorista === 'number');
+
+    // Ordena com base em distClienteMotorista
+    viagensOrdenadas.splice(0, viagensOrdenadas.length, ...viagensFiltradas.sort((a, b) => {
+      return (a.distClienteMotorista! - b.distClienteMotorista!);
+    }));
+  }
+
+  ngOnDestroy(): void {
+      // Cancela o intervalo quando o componente for destruído
+      if (this.viagensSubscription) {
+        this.viagensSubscription.unsubscribe();
+      }
+  }
+
+  verificarSeEmTurnoAtual(): boolean {
+    const agora = new Date();
+
+    return this.listaTurnosMotorista.some((turno) => {
+      const inicio = new Date(turno.dataInicio);
+      const fim = new Date(turno.dataFim);
+      return agora >= inicio && agora <= fim;
+    });
+  }
+
+   aceitarPedido(viagemId: string, distCM: number, quilometros: number): void {
+       const dataAtual = new Date(); // Obter data e hora atual
+
+       // Encontrar o turno correspondente ao momento atual
+       const turnoAtual = this.listaTurnosMotorista.find(turno => {
+         const inicioTurno = new Date(turno.dataInicio);
+         const fimTurno = new Date(turno.dataFim);
+
+         // Verificar se a data/hora atual está dentro do intervalo do turno
+         return dataAtual >= inicioTurno && dataAtual <= fimTurno;
+       });
+
+       if (turnoAtual) {
+         // Se um turno for encontrado, extrair os IDs de motorista e taxi
+         const motoristaId = turnoAtual.motorista._id;
+         const taxiId = turnoAtual.taxi._id;
+
+         // Verificar se os IDs são válidos (não são nulos ou undefined)
+         if (motoristaId && taxiId) {
+           // Chamar o serviço para aceitar a viagem, passando os parâmetros necessários
+           this.viagemService.aceitarViagem(viagemId, motoristaId, taxiId,distCM, quilometros).subscribe({
+             next: (viagem) => {
+               console.log('Viagem aceite com sucesso:', viagem);
+               // Atualizar UI ou lista conforme necessário
+             },
+             error: (err) => {
+               console.error('Erro ao aceitar viagem:', err);
+             }
+           });
+         } else {
+           console.error('Motorista ou Taxi não possuem IDs válidos');
+         }
+       } else {
+         console.log('Nenhum turno encontrado para o momento atual.');
+       }
+     }
+
 }
