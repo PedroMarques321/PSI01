@@ -214,14 +214,14 @@ export class MotoristaComponent implements OnInit, OnDestroy {
         motorista: JSON.parse(JSON.stringify(this.turno.motorista)), // cópia profunda
         taxi: JSON.parse(JSON.stringify(this.turno.taxi))            // cópia profunda
       };
-
+        this.listaTurnos.push(novoTurno);
         this.listaTurnosMotorista.push(novoTurno);
     }
   }
 
   verificarTurnoExistente(): boolean {
     // Verifica se já existe um turno para o mesmo motorista e no mesmo período
-    const turnoExistente = this.listaTurnos.some(turno => {
+    const turnoExistente = this.listaTurnosMotorista.some(turno => {
       const inicioAtual = new Date(turno.dataInicio);
       const fimAtual = new Date(turno.dataFim);
       // Verifica se o turno já existe e se as datas coincidem
@@ -242,7 +242,10 @@ export class MotoristaComponent implements OnInit, OnDestroy {
   isDataValida(): boolean {
 
     const duracaoMs = this.turno.dataFim.getTime() - this.turno.dataInicio.getTime();
+    console.log('Duração é de : ', duracaoMs);
+
     const oitoHorasMs = 8 * 60 * 60 * 1000;
+    console.log('Oito horas são : ', oitoHorasMs);
 
     return this.turno.dataInicio < this.turno.dataFim && duracaoMs <= oitoHorasMs;
   }
@@ -264,11 +267,15 @@ export class MotoristaComponent implements OnInit, OnDestroy {
 
     const novoInicio = new Date(this.dataInicioStr);
     const novoFim = new Date(this.dataFimStr);
-
+    console.log('Turnos existentes: ' , this.listaTurnos);
     const taxisConflitantes = this.listaTurnos
       .filter(turno => {
         const inicioExistente = new Date(turno.dataInicio);
         const fimExistente = new Date(turno.dataFim);
+        console.log('InicioExistente : ', inicioExistente);
+        console.log('FimExistente : ', fimExistente);
+        console.log('NovoInicio : ', novoInicio);
+        console.log('NovoFim : ', novoFim);
         return novoInicio < fimExistente && inicioExistente < novoFim;
       })
       .map(turno => turno.taxi); // Retorna os táxis dos turnos que intersetam
