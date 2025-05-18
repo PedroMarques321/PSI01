@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+
+
 const taxicontroller = require("../controllers/taxiController");
 
 //Taxi endpoints
@@ -34,6 +36,8 @@ router.put("/viagem/cancelar/:id", viagemcontroller.viagemCancelar); // Atualiza
 router.put("/viagem/concluir/:id", viagemcontroller.viagemConcluir); // Atualizar viagem existente
 router.put("/viagem/pendente/:id", viagemcontroller.viagemPendente); // Atualizar viagem existente
 router.get("/viagemNif/:nif", viagemcontroller.viagemGetByClienteId); //Obter viagem pelo nif do criador
+router.put('/:id/atribuirturno', viagemcontroller.atribuirTurno);  // PUT /dashboard/:id/atribuirturno
+
 
 //router.delete("/viagem/:id", viagemcontroller.viagemDelete); // Excluir viagem existente
 
@@ -42,5 +46,6 @@ const turnocontroller = require("../controllers/turnoController");
 // Turno endpoints
 router.get("/turnos", turnocontroller.turnosGetAll); // Listar todos os turnos
 router.post("/turno", turnocontroller.turnoCreate); // Criar novo turno
+router.put("/turnos/:id", turnocontroller.turnoUpdateFim); // Atualizar turno existente
 
 module.exports = router;

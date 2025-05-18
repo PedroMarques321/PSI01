@@ -13,7 +13,7 @@ const taxiSchema = taxiModel.schema;
 // Definindo o schema do Turno
 const turnoSchema = new schema({
   dataInicio: { type: Date, required: true },
-  dataFim: { type: Date, required: true },
+  dataFim: { type: Date, required: false, default: null },
   motorista: { type: mongoose.Schema.Types.ObjectId, ref: 'Motorista', required: true },
   taxi: { type: mongoose.Schema.Types.ObjectId, ref: 'Taxi', required: true },
 });

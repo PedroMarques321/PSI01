@@ -19,10 +19,19 @@ const viagemSchema = new schema({
     tipoServico: { type: String, enum: ['Normal', 'Luxo'], required: true },
     estado: { 
         type: String, 
-        enum: ['PENDENTE', 'ACEITE', 'REJEITADO', 'CANCELADO', 'CONCLUIDO'], 
+        enum: ['PENDENTE', 'ACEITE', 'REJEITADO', 'CANCELADO', 'CONCLUIDO', 'EM_CURSO'], 
         required: true,
         default: 'PENDENTE'
     },
+    coordenadasPartida: {
+    lat: { type: Number },
+    lng: { type: Number }
+    },
+    coordenadasChegada: {
+    lat: { type: Number },
+    lng: { type: Number }
+    },
+    horaChegada: { type: Date },
     distClienteMotorista: { type: Number, required: false, default: null }
 });
 

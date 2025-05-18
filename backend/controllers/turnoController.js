@@ -23,12 +23,12 @@ exports.turnoCreate = asyncHandler(async function(req, res, next) {
     console.log("turnoController(turnoCreate): Creating new turno");
 
     // Recebe o corpo da requisição (turno em formato JSON)
-    const { dataInicio, dataFim, motorista, taxi } = req.body;
+    const { dataInicio, dataFim, motoristaId, taxiId } = req.body;
 
-    // Verificando se o _id do motorista e a matricula do taxi são válidos
-    // Buscando o motorista pelo _id e o taxi pela matricula
-    const motoristaEncontrado = await Motorista.findById(motorista._id);
-    const taxiEncontrado = await Taxi.findOne({ matricula: taxi.matricula });
+    // Verifica se o _id do motorista e a matricula do taxi são válidos
+    // Busca o motorista pelo _id e o taxi pela matricula
+    const motoristaEncontrado = await Motorista.findById(motoristaId);
+    const taxiEncontrado = await Taxi.findById(taxiId);
 
     if (!motoristaEncontrado || !taxiEncontrado) {
         res.status(400);
@@ -55,4 +55,17 @@ exports.turnoCreate = asyncHandler(async function(req, res, next) {
         console.error("Erro ao criar o turno:", error);
         res.status(500).json({ message: "Erro ao criar o turno", error: error.message });
     }
+});
+
+exports.turnoUpdateFim = asyncHandler(async (req, res) => {
+  const turno = await Turno.findById(req.params.id);
+  if (!turno) {
+    res.status(404);
+    throw new Error("Turno não encontrado");
+  }
+
+  turno.dataFim = req.body.dataFim ? new Date(req.body.dataFim) : new Date();
+  await turno.save();
+
+  res.json({ message: "Turno atualizado com sucesso", turno });
 });

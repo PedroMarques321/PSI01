@@ -10,7 +10,7 @@ const Viagem = require("../models/viagem");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 
-const mongoDB = "mongodb+srv://pedromarques2881997:dSjSww1uXxE6sbJP@cluster0.tj7cu.mongodb.net/local_library?retryWrites=true&w=majority&appName=Cluster0";
+const mongoDB = "mongodb+srv://diogo:psi01@cluster0.sacvmdg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
   
   // We pass the index to the ...Create functions so that, for example,
   // genre[0] will always be the Fantasy genre, regardless of the order
@@ -20,7 +20,7 @@ const mongoDB = "mongodb+srv://pedromarques2881997:dSjSww1uXxE6sbJP@cluster0.tj7
 router.get('/', async (req, res) => {
     try {
       console.log("init.js: Initializing database...");
-      await mongoose.connect(mongoDB);
+      //await mongoose.connect(mongoDB);
 
       const pricesCount = await Price.countDocuments();
       const driversCount = await Driver.countDocuments();

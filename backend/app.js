@@ -10,6 +10,8 @@ var dashboardRouter = require('./routes/dashboard');
 var initRouter = require('./routes/init');
 var pedidosRouter = require('./routes/pedidos');
 
+
+
 var app = express(); 
 
 
@@ -37,6 +39,7 @@ app.use('/', indexRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/init', initRouter);    
 app.use('/pedidos', pedidosRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
