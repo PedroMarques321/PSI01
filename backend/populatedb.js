@@ -56,7 +56,7 @@ async function taxiCreate(index, modelo, marca, conforto, matricula, ano_de_comp
     console.log(`Added taxi: ${modelo} ${marca}`);
 }
 
-async function driverCreate(index, morada, carta_de_conducao, pessoa, nascimento) {
+async function driverCreate(index, morada, carta_de_conducao, pessoa, nascimento) {  
     const driverdetail = {
         morada: morada,
         carta_de_conducao: carta_de_conducao,

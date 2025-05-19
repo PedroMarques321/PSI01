@@ -6,7 +6,6 @@ const pessoaModel = require('./pessoa');
 const pessoaSchema = pessoaModel.schema;
 const moradaModel = require('./morada');
 const moradaSchema = moradaModel.schema;
-const morada = require('./morada');
 
 const motoristaSchema = new schema({
     morada: moradaSchema,
