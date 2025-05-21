@@ -23,12 +23,22 @@ exports.turnoCreate = asyncHandler(async function(req, res, next) {
     console.log("turnoController(turnoCreate): Creating new turno");
 
     // Recebe o corpo da requisição (turno em formato JSON)
-    const { dataInicio, dataFim, motoristaId, taxiId } = req.body;
+    const { dataInicio, dataFim, motorista, taxi } = req.body;
 
+    const motoristaId = motorista?._id;  // ID do motorista
+    const taxiId = taxi?._id;  // ID do taxi
+    
     // Verifica se o _id do motorista e a matricula do taxi são válidos
     // Busca o motorista pelo _id e o taxi pela matricula
     const motoristaEncontrado = await Motorista.findById(motoristaId);
     const taxiEncontrado = await Taxi.findById(taxiId);
+
+    console.log("req.body:", motoristaId);
+    console.log("req.body:", taxiId);
+
+    console.log("Motorista encontrado:", motoristaEncontrado);
+    console.log("Taxi encontrado:", taxiEncontrado);
+    console.log("Dados do turno:", req.body);
 
     if (!motoristaEncontrado || !taxiEncontrado) {
         res.status(400);
@@ -40,8 +50,8 @@ exports.turnoCreate = asyncHandler(async function(req, res, next) {
         _id: new mongoose.Types.ObjectId(),  // Criação de um ObjectId
         dataInicio,
         dataFim,
-        motorista: motoristaEncontrado._id,  // Usando o ID do motorista encontrado
-        taxi: taxiEncontrado._id  // Usando o ID do taxi encontrado
+        motorista: motoristaEncontrado,  // Usando o ID do motorista encontrado
+        taxi: taxiEncontrado  // Usando o ID do taxi encontrado
     });
 
     // Salva o novo turno na base de dados
