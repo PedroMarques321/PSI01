@@ -143,9 +143,9 @@ async function createTaxis() {
 async function createDrivers() {
     console.log("Creating Drivers");
     await Promise.all([
-        driverCreate(0, moradas[0], "1914567890", pessoas[0], new Date("1990-01-01")),
-        driverCreate(1, moradas[1], "1232567890", pessoas[1], new Date("1990-01-01")),
-        driverCreate(2, moradas[2], "1234561890", pessoas[2], new Date("1990-01-01"))
+        driverCreate(0, moradas[0], "191456789", pessoas[0], new Date("1990-01-01")),
+        driverCreate(1, moradas[1], "123256789", pessoas[1], new Date("1990-01-01")),
+        driverCreate(2, moradas[2], "123456189", pessoas[2], new Date("1990-01-01"))
     ]);
 }
 
