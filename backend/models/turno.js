@@ -14,8 +14,8 @@ const taxiSchema = taxiModel.schema;
 const turnoSchema = new schema({
   dataInicio: { type: Date, required: true },
   dataFim: { type: Date, required: false, default: null },
-  motorista: { type: mongoose.Schema.Types.ObjectId, ref: 'Motorista', required: true },
-  taxi: { type: mongoose.Schema.Types.ObjectId, ref: 'Taxi', required: true },
+  motorista: motoristaSchema,
+  taxi: taxiSchema,
 });
 
 // Virtual para criar a URL do Turno
