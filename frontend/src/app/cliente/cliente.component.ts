@@ -395,9 +395,18 @@ stopFetchingViagem(): void {
 
     }
 
-  aceitarMotorista(): void {}
+  aceitarMotorista(): void {
+    this.taxisService.usarTaxi(this.viagemAceite!.taxiID!).subscribe();
 
-  rejeitarMotorista(): void {}
+
+    }
+
+  rejeitarMotorista(): void {
+    this.viagemAceite!.estado = EstadoPedido.REJEITADO;
+    this.viagemService.rejeitarViagem(this.viagemAceite!).subscribe();
+
+
+    }
 
 
 }

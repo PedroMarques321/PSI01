@@ -15,6 +15,7 @@ import { MaterialImports } from './material.imports';
 import { ManagementComponent } from './management/management.component';
 import { MotoristaComponent } from './motorista/motorista.component';
 import { ClienteComponent } from './cliente/cliente.component';
+import { GestorComponent } from './gestor/gestor.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ClienteComponent } from './cliente/cliente.component';
     HeaderComponent,
     ManagementComponent,
     MotoristaComponent,
-    ClienteComponent
+    ClienteComponent,
+    GestorComponent
   ],
   imports: [
     BrowserModule,

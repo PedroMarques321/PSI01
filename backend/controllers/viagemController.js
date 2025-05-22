@@ -54,90 +54,51 @@ exports.viagemGetByClienteId = asyncHandler(async function(req, res, next) {
 
 // Handle Viagem POST
 exports.viagemCreate = asyncHandler(async function(req, res, next) {
-  console.log("viagemController(viagemCreate): Criar viagem automaticamente a partir de um pedido");
+  console.log("viagemController(viagemCreate): Criando nova viagem");
 
-  const { pedidoId, moradaPartida, moradaChegada, motoristaId, coordenadasMotorista } = req.body;
+      // Obter a última sequência para incrementar
+      const ultimaViagem = await Viagem.findOne().sort({ sequencia: -1 });
+      const novaSequencia = ultimaViagem ? ultimaViagem.sequencia + 1 : 1;
 
-  // Buscar o pedido
-  const pedido = await Pedido.findById(pedidoId);
-  if (!pedido || pedido.estado !== 'aceite') {
-    return res.status(400).json({ message: "Pedido inválido ou não aceite" });
-  }
+      // Recebe o corpo da requisição que deve ser um objeto viagem em formato JSON
+      const {
+          numeroPessoas,
+          clienteID,
+          data,
+          horaPartida,
+          horaChegadaEstimada,
+          quilometros,
+          moradaPartida,
+          moradaChegada,
+          preco,
+          tipoServico
+      } = req.body;
 
-  // Buscar o turno ativo do motorista
-  const turno = await Turno.findOne({ motorista: motoristaId, dataFim: null });
-  if (!turno) {
-    return res.status(400).json({ message: "Motorista não está num turno ativo" });
-  }
+      // Criar nova viagem
+      const novaViagem = new Viagem({
+          _id: new mongoose.Types.ObjectId(),
+          sequencia: novaSequencia,
+          numeroPessoas,
+          clienteID,
+          data,
+          horaPartida,
+          horaChegadaEstimada,
+          quilometros,
+          moradaPartida,
+          moradaChegada,
+          preco,
+          tipoServico,
+          estado: 'PENDENTE' // Estado padrão para novas viagens
+      });
 
-  // Buscar viagens já existentes no turno para verificar sequência e conflitos
-  const viagensDoTurno = await Viagem.find({ turnoID: turno._id });
-  const novaSequencia = viagensDoTurno.length + 1;
-
-  // Calcular distâncias para estimativa de duração
-  const distMotoristaCliente = haversine(
-    coordenadasMotorista.lat,
-    coordenadasMotorista.lng,
-    pedido.coordenadas_origem.lat,
-    pedido.coordenadas_origem.lng
-  );
-  const distClienteDestino = haversine(
-    pedido.coordenadas_origem.lat,
-    pedido.coordenadas_origem.lng,
-    pedido.coordenadas_destino.lat,
-    pedido.coordenadas_destino.lng
-  );
-  const distanciaTotalKm = distMotoristaCliente + distClienteDestino;
-
-  const duracaoMin = distanciaTotalKm * 4; // 4 minutos por km
-  const novaInicio = new Date();
-  const novaFim = new Date(novaInicio.getTime() + duracaoMin * 60000);
-
-  // Verificar sobreposição com outras viagens
-  const sobreposta = viagensDoTurno.some(v => {
-    const inicioV = new Date(v.horaPartida);
-    const fimV = new Date(v.horaChegada || v.horaChegadaEstimada || new Date(inicioV.getTime() + 1800000));
-    return (
-      (novaInicio >= inicioV && novaInicio < fimV) ||
-      (novaFim > inicioV && novaFim <= fimV) ||
-      (novaInicio <= inicioV && novaFim >= fimV)
-    );
-  });
-
-  if (sobreposta) {
-    return res.status(400).json({ message: "Já existe uma viagem neste intervalo no turno do motorista." });
-  }
-
-  // Criar nova viagem
-  const novaViagem = new Viagem({
-    _id: new mongoose.Types.ObjectId(),
-    sequencia: novaSequencia,
-    numeroPessoas: pedido.numero_pessoas,
-    clienteID: pedido.cliente.toString(), // necessário como string
-    data: new Date(),
-    horaPartida: novaInicio.toTimeString().slice(0, 5),
-    horaChegadaEstimada: novaFim.toTimeString().slice(0, 5),
-    moradaPartida: moradaPartida,
-    moradaChegada: moradaChegada,
-    turnoID: turno._id,
-    condutorID: motoristaId,
-    pedidoID: pedidoId,
-    estado: 'EM_CURSO',
-    coordenadasPartida: pedido.coordenadas_origem,
-    coordenadasChegada: pedido.coordenadas_destino,
-    quilometros: parseFloat(distClienteDestino.toFixed(2)),
-    preco: 0, // será calculado no concluir
-    tipoServico: "Normal" // ou "Luxo" se o serviço permitir
-  });
-
-  try {
-    await novaViagem.save();
-    console.log("Viagem criada com sucesso!");
-    res.status(201).json(novaViagem);
-  } catch (error) {
-    console.error("Erro ao criar viagem:", error);
-    res.status(500).json({ message: "Erro ao criar viagem", error: error.message });
-  }
+    try {
+            await novaViagem.save();
+            console.log("Viagem criada com sucesso!");
+            res.status(201).json(novaViagem);
+        } catch (error) {
+            console.error("Erro ao criar viagem:", error);
+            res.status(500).json({ message: "Erro ao criar viagem", error: error.message });
+        }
 });
 
 

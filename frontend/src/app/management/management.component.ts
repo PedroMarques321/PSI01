@@ -56,7 +56,9 @@ export class ManagementComponent {
     conforto: 'Normal',
     matricula: 'AA-00-AA',
     ano_de_compra: new Date(),
-    lugares: 4
+    lugares: 4,
+    requesitado: false,
+    usado: false
   };
 
   novoMotorista = {
@@ -195,7 +197,9 @@ export class ManagementComponent {
       conforto: 'Normal',
       matricula: 'AA-00-AA',
       ano_de_compra: new Date(),
-      lugares: 4
+      lugares: 4,
+      requesitado: false,
+      usado: false
     };
   }
 

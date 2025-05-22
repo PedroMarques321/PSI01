@@ -5,5 +5,7 @@ export interface Taxi {
   conforto: string,
   matricula: string,
   ano_de_compra: Date,
-  lugares: number
+  lugares: number,
+  requesitado: boolean,
+  usado: boolean
 }

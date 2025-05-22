@@ -8,6 +8,10 @@ const taxicontroller = require("../controllers/taxiController");
 //Taxi endpoints
 router.get("/taxis", taxicontroller.taxisGetAll);
 router.post("/taxi", taxicontroller.taxiCreate);
+router.put("/requesitar-taxi/:id", taxicontroller.taxiRequesitar);
+router.put("/taxi/usar/:id", taxicontroller.taxiUsar);
+router.delete("/taxi/remover/:id", taxicontroller.taxiRemover);
+router.put("/taxi/update/:id", taxicontroller.taxiUpdate);
 
 const drivercontroller = require("../controllers/driverController");
 

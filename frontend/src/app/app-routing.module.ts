@@ -4,6 +4,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ManagementComponent} from './management/management.component';
 import { MotoristaComponent } from './motorista/motorista.component';
 import { ClienteComponent } from './cliente/cliente.component';
+import { GestorComponent } from './gestor/gestor.component';
 
 
 const routes: Routes = [
@@ -11,7 +12,8 @@ const routes: Routes = [
   { path: 'dashboard',component: DashboardComponent,children: [
     { path: 'management', component: ManagementComponent },
     { path: 'motorista', component: MotoristaComponent },
-    { path: 'cliente', component: ClienteComponent}
+    { path: 'cliente', component: ClienteComponent},
+    { path: 'gestor', component: GestorComponent}
 ]
   }
 

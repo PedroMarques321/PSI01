@@ -81,6 +81,18 @@ export class ViagemService {
       );
   }
 
+  rejeitarViagem(viagem: Viagem): Observable<Viagem> {
+    const url = `http://localhost:3000/dashboard/viagem/rejeitar/${viagem._id}`;
+
+    return this.http.put<Viagem>(url, {}, this.httpOptions)
+    .pipe(
+      tap(viagem => {
+        console.log('Viagem regeitada: ', viagem);
+        }),
+      catchError(this.handleError<Viagem>('rejeitarViagem'))
+    );
+  }
+
 
   /** Tratamento de erro */
   private handleError<T>(operation = 'operation', result?: T) {
