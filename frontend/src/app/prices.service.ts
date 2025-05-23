@@ -9,7 +9,8 @@ import { Prices } from './prices';
 })
 export class PricesService {
 
-  private pricesUrl = 'http://localhost:3000/dashboard/prices';
+  //private pricesUrl = 'http://localhost:3001/dashboard/prices';
+  private pricesUrl = 'http://appserver.alunos.di.fc.ul.pt:3001/dashboard/prices';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

@@ -14,13 +14,22 @@ var pedidosRouter = require('./routes/pedidos');
 
 var app = express(); 
 
-
+/*
 const mongoose = require('mongoose');
 mongoose.connect("mongodb://localhost:27017/webtaxi").then(() => {
   console.log("Ligado à base de dados MongoDB");
 }).catch((err) => {
     console.error("Erro na ligação à base de dados:", err);
 });
+*/
+// Conexão com o MongoDB AppServer
+
+mongoose.connect("mongodb://PSI001:PSI001@localhost:27017/PSI001?retryWrites=true&authSource=PSI001/webtaxi").then(() => {
+  console.log("Ligado à base de dados MongoDB");
+}).catch((err) => {
+    console.error("Erro na ligação à base de dados:", err);
+});
+
 
 // CORS
 app.use(cors());
@@ -58,8 +67,9 @@ app.use(function(err, req, res, next) {
 });
 
 // Iniciar o servidor
-app.listen(3000, () => {
-  console.log("Servidor a correr na porta 3000");
+/*
+app.listen(3051, () => {
+  console.log("Servidor a correr na porta 3051");
 });
-
+*/
 module.exports = app;

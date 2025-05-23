@@ -9,8 +9,10 @@ import { Motorista } from './motorista';
 })
 export class DriverService {
 
-  private allDriversUrl = 'http://localhost:3000/dashboard/drivers';
-  private postDriverUrl = 'http://localhost:3000/dashboard/driver';
+  //private allDriversUrl = 'http://localhost:3001/dashboard/drivers';
+  private allDriversUrl = 'http://appserver.alunos.di.fc.ul.pt:3001/dashboard/drivers';
+  //private postDriverUrl = 'http://localhost:3001/dashboard/driver';
+  private postDriverUrl = 'http://appserver.alunos.di.fc.ul.pt:3001/dashboard/driver';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -47,7 +49,8 @@ export class DriverService {
   /** PUT - Requesitar motorista */
   requesitarDriver(motorista: Motorista): Observable<Motorista> {
     console.log("Motorista a requesitar: ", motorista);
-    const url = `http://localhost:3000/dashboard/requesitar-driver/${motorista._id}`;
+    //const url = `http://localhost:3001/dashboard/requesitar-driver/${motorista._id}`;
+    const url = `http://appserver.alunos.di.fc.ul.pt:3001/dashboard/requesitar-driver/${motorista._id}`;
 
     console.log('requesitarDriver chamado com:', motorista);
 
@@ -59,7 +62,8 @@ export class DriverService {
 
   /** DELETE - Remover motorista pelo ID */
   removerMotorista(id: string): Observable<any> {
-    const url = `http://localhost:3000/dashboard/driver/remover/${id}`;
+    //const url = `http://localhost:3001/dashboard/driver/remover/${id}`;
+    const url = `http://appserver.alunos.di.fc.ul.pt:3001/dashboard/driver/remover/${id}`;
     console.log(`Remover motorista com ID: ${id}`);
 
     return this.http.delete(url, this.httpOptions).pipe(
