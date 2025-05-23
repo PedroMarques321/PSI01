@@ -16,6 +16,7 @@ import { ManagementComponent } from './management/management.component';
 import { MotoristaComponent } from './motorista/motorista.component';
 import { ClienteComponent } from './cliente/cliente.component';
 import { GestorComponent } from './gestor/gestor.component';
+import { RelatoriosComponent } from './relatorios/relatorios.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { GestorComponent } from './gestor/gestor.component';
     ManagementComponent,
     MotoristaComponent,
     ClienteComponent,
-    GestorComponent
+    GestorComponent,
+    RelatoriosComponent
   ],
   imports: [
     BrowserModule,
