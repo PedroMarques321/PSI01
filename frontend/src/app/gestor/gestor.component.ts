@@ -87,9 +87,16 @@ export class GestorComponent {
       this.mostrarTaxis = true;
   }
 
-  removerTaxi(taxiID: string): void {
-   this.taxisService.removerTaxi(taxiID).subscribe();
-   this.getTaxis();
+  removerTaxi(id: string): void {
+    this.taxisService.removerTaxi(id).subscribe(
+      () => {
+        // Remove o táxi da lista local após sucesso na remoção
+        this.listaTaxis = this.listaTaxis.filter(taxi => taxi._id !== id);
+      },
+      error => {
+        console.error('Erro ao remover táxi:', error);
+      }
+    );
   }
 
   editarTaxi(taxi: Taxi): void {
@@ -123,10 +130,15 @@ export class GestorComponent {
       }
     }
 
-  cancelarEdicao(): void {
+  cancelarEdicaoTaxi(): void {
     this.taxiAEditar = null;
     this.mostrarEditorTaxi = false;
-    }
+  }
+
+  cancelarEdicaoMotorista(): void {
+    this.motoristaAEditar = null;
+    this.mostrarEditorMotorista = false;
+  }
 
   guardarEdicao(): void {
     if (!this.taxiAEditar || !this.taxiAEditar._id) return;
@@ -186,10 +198,17 @@ export class GestorComponent {
     this.mostrarEditorMotorista = false;
     }
 
-  removerMotorista(motorista: Motorista): void{
-    this.driverService.removerMotorista(motorista!._id!).subscribe();
-    this.getDrivers();
-    }
+  removerMotorista(id: string): void {
+    this.driverService.removerMotorista(id).subscribe(
+      () => {
+        // Remove o motorista da lista local após sucesso na remoção
+        this.listaDrivers = this.listaDrivers.filter(motorista => motorista._id !== id);
+      },
+      error => {
+        console.error('Erro ao remover motorista:', error);
+      }
+    );
+  }
 
   editarMotorista(motorista: Motorista): void{
     this.mostrarEditorMotorista = true;

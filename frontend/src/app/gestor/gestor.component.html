@@ -1,254 +1,99 @@
-<div class="gestor-container">
-  <button (click)="mostrarLista()">Mostrar Táxis</button>
+<div class="dashboard">
+  <!-- Seção Táxis -->
+  <div class="section">
+    <h2>Lista de Táxis</h2>
+    
+    <ul class="list">
+      <li *ngFor="let taxi of listaTaxis" class="list-item">
+        {{ taxi.matricula }} - {{ taxi.marca }} {{ taxi.modelo }} ({{ taxi.ano_de_compra | date:'yyyy-MM-dd' }}) - Conforto: {{ taxi.conforto }}
+        
+        <span class="actions">
+          <button class="edit-btn" (click)="editarTaxi(taxi)">Editar</button>
+          <button class="delete-btn" *ngIf="!taxi.requesitado" (click)="removerTaxi(taxi._id!)">Apagar</button>
+        </span>
 
-  <div *ngIf="loading">A carregar táxis...</div>
-  <div *ngIf="errorMessage">{{ errorMessage }}</div>
+        <!-- Formulário de Edição -->
+        <div *ngIf="taxiAEditar?._id === taxi._id" class="edit-form">
+          <div class="form-row">
+            <label>Matrícula:</label>
+            <input type="text" [(ngModel)]="taxiAEditar!.matricula" name="matricula">
+          </div>
 
-  <div *ngIf="mostrarTaxis">
-    <h3>Lista de Táxis</h3>
-    <ul>
-      <li *ngFor="let taxi of listaTaxis" class="taxi-item">
-        <strong>{{ taxi.modelo }} ({{ taxi.marca }})</strong>
-        Matrícula: {{ taxi.matricula }}<br>
-        <button (click)="editarTaxi(taxi)">Editar</button>
-        <button *ngIf="!taxi.requesitado" (click)="removerTaxi(taxi._id!)">Remover</button>
-      </li>
-    </ul>
+          <div class="form-row">
+            <label>Marca:</label>
+            <select [(ngModel)]="taxiAEditar!.marca" name="marca" (change)="atualizarModelos()">
+              <option *ngFor="let marca of marcasDisponiveis" [value]="marca">{{ marca }}</option>
+            </select>
+          </div>
 
-    <!-- Formulário de Edição -->
-    <div *ngIf="mostrarEditorTaxi && taxiAEditar" class="editor-form">
-      <h3>Editar Táxi</h3>
+          <div class="form-row">
+            <label>Modelo:</label>
+            <select [(ngModel)]="taxiAEditar!.modelo" name="modelo">
+              <option *ngFor="let modelo of todosModelos[taxiAEditar!.marca]" [value]="modelo">{{ modelo }}</option>
+            </select>
+          </div>
 
-      <!-- Matrícula -->
-      <div>
-        <label for="matricula">Matrícula:</label>
-        <mat-form-field class="matricula" appearance="outline">
-          <input
-            matInput
-            type="text"
-            id="matricula"
-            name="matricula"
-            [(ngModel)]="taxiAEditar.matricula"
-            required
-          />
-        </mat-form-field>
-      </div>
-      <div *ngIf="!validarMatricula(taxiAEditar.matricula)" style="color: red;">
-        Matrícula inválida!
-      </div>
+          <div class="form-row">
+            <label>Conforto:</label>
+            <select [(ngModel)]="taxiAEditar!.conforto" name="conforto">
+              <option value="Normal">Normal</option>
+              <option value="Muito Confortável">Muito Confortável</option>
+            </select>
+          </div>
 
-      <!-- Marca -->
-      <div>
-        <label for="marca">Marca:</label>
-        <select id="marca" name="marca" [(ngModel)]="taxiAEditar.marca" (change)="atualizarModelos()" required>
-          <option value="" disabled>-- Escolhe a marca --</option>
-          <option *ngFor="let marca of marcasDisponiveis" [value]="marca">{{ marca }}</option>
-        </select>
-      </div>
-
-      <!-- Modelo -->
-      <div>
-        <label for="modelo">Modelo:</label>
-        <select id="modelo" name="modelo" [(ngModel)]="taxiAEditar.modelo" [disabled]="!modelosDisponiveis.length" required>
-          <option value="" disabled>-- Escolhe o modelo --</option>
-          <option *ngFor="let modelo of modelosDisponiveis" [value]="modelo">{{ modelo }}</option>
-        </select>
-      </div>
-
-      <!-- Ano de Compra -->
-      <div>
-        <label for="anoCompra">Ano de Compra:</label>
-        <input
-          type="date"
-          id="anoCompra"
-          name="anoCompra"
-          [(ngModel)]="taxiAEditar.ano_de_compra"
-          required
-        />
-      </div>
-      <div *ngIf="!validarData(taxiAEditar.ano_de_compra, 0)" style="color: red;">
-        A data de compra não pode ser superior à data atual.
-      </div>
-
-      <!-- Nível de Conforto -->
-      <div *ngIf="taxiAEditar.usado === false">
-        <label for="conforto">Nível de Conforto (RIA 16):</label>
-        <select
-          id="conforto"
-          name="conforto"
-          [(ngModel)]="taxiAEditar.conforto"
-          required
-        >
-          <option value="Muito Confortável">Muito Confortável</option>
-          <option value="Normal">Normal</option>
-        </select>
-      </div>
-
-      <!-- Número de Lugares -->
-      <div>
-        <label for="lugares">Número de Lugares:</label>
-        <input type="number" id="lugares" name="lugares" [(ngModel)]="taxiAEditar.lugares" required>
-      </div>
-
-      <!-- Botões -->
-      <div class="editor-buttons">
-        <button (click)="guardarEdicao()">Guardar Alterações</button>
-        <button (click)="cancelarEdicao()">Cancelar</button>
-      </div>
-    </div>
-
-  </div>
-
-  <button (click)="mostrarListaMotoristas()">Mostrar Motoristas</button>
-
-  <div *ngIf="loadingMotoristas">A carregar motoristas...</div>
-  <div *ngIf="erroMotoristas">{{ erroMotoristas }}</div>
-
-  <!-- Lista de Motoristas -->
-  <div *ngIf="mostrarMotoristas">
-    <h3>Lista de Motoristas</h3>
-    <ul>
-      <li *ngFor="let motorista of listaDrivers" class="motorista-item">
-        <strong>{{ motorista.pessoa.nome }}</strong>
-        - NIF: {{ motorista.pessoa.nif }}<br>
-
-        <button *ngIf="!motorista.requesitado" (click)="removerMotorista(motorista)">Remover</button>
-        <button (click)="editarMotorista(motorista)">Editar</button>
+          <div class="form-actions">
+            <button (click)="guardarEdicao()">Guardar</button>
+            <button (click)="cancelarEdicaoTaxi()">Cancelar</button>
+          </div>
+        </div>
       </li>
     </ul>
   </div>
 
-  <!-- Formulário de registo do motorista -->
-  <div *ngIf="mostrarEditorMotorista">
-    <h2 class="titulo">Registar Novo Motorista</h2>
+  <!-- Seção Motoristas -->
+  <div class="section">
+    <h2>Lista de Motoristas</h2>
 
-    <form (ngSubmit)="guardarEdicaoMotorista()" #formMotorista="ngForm">
-      <!-- NIF -->
-      <div>
-        <label for="nif">NIF:</label>
-        <input
-          type="number"
-          id="nif"
-          name="nif"
-          [(ngModel)]="motoristaAEditar!.pessoa.nif"
-          required
-        />
-      </div>
-      <div *ngIf="!nifValido()" style="color: red;">
-        NIF inválido.
-      </div>
-
-      <!-- Nome -->
-      <div>
-        <label for="nome">Nome:</label>
-        <input
-          type="text"
-          id="nome"
-          name="nome"
-          [(ngModel)]="motoristaAEditar!.pessoa.nome"
-          required
-        />
-      </div>
-      <div *ngIf="!nomeValido()" style="color: red;">
-        O nome não deve conter números.
-      </div>
-
-      <!-- Género -->
-      <div>
-        <label for="genero">Género:</label>
-        <select
-          id="genero"
-          name="genero"
-          [(ngModel)]="motoristaAEditar!.pessoa.genero"
-          required
-        >
-          <option [ngValue]="Genero.Masculino">Masculino</option>
-          <option [ngValue]="Genero.Feminino">Feminino</option>
-        </select>
-      </div>
-
-      <!-- Código Postal -->
-      <div>
-        <label for="codigoPostal">Código Postal:</label>
-        <input
-          type="text"
-          id="codigoPostal"
-          name="codigoPostal"
-          [(ngModel)]="motoristaAEditar!.morada.codigo_postal"
-          required
-          pattern="^\d{4}-\d{3}$"
-          (ngModelChange)="onCodigoPostalChange()"
-        />
-      </div>
-      <!-- Exibição da Localidade -->
-      <div *ngIf="motoristaAEditar!.morada.localidade">
-        <label>Localidade:</label>
-        <span>{{ motoristaAEditar!.morada.localidade }}</span>
-      </div>
-
-      <!-- Rua -->
-      <div>
-        <label for="rua">Rua:</label>
-        <input
-          type="text"
-          id="rua"
-          name="rua"
-          [(ngModel)]="motoristaAEditar!.morada.rua"
-          required
-        />
-      </div>
-      <div *ngIf="!ruaValida()" style="color: red;">
-        A rua deve conter apenas letras.
-      </div>
-
-      <!-- Número da Porta -->
-      <div>
-        <label for="numeroPorta">N.º Porta:</label>
-        <input
-          type="text"
-          id="numeroPorta"
-          name="numeroPorta"
-          [(ngModel)]="motoristaAEditar!.morada.numero_porta"
-          required
-        />
-      </div>
-      <div *ngIf="!portaValida()" style="color: red;">
-        O número da porta deve ser um número válido.
-      </div>
-
-      <!-- Carta de Condução -->
-      <div>
-        <label for="carta">Carta de Condução:</label>
-        <input
-          type="text"
-          id="carta"
-          name="carta"
-          [(ngModel)]="motoristaAEditar!.carta_de_conducao"
-          required
-        />
-      </div>
-
-      <!-- Data de Nascimento -->
-      <div>
-        <label for="nascimento">Data de Nascimento:</label>
-        <input
-          type="date"
-          id="nascimento"
-          name="nascimento"
-          [(ngModel)]="motoristaAEditar!.nascimento"
-          required
-        />
-      </div>
-      <div *ngIf="!validarData(motoristaAEditar!.nascimento, 18)" style="color: red;">
-        A data de nascimento não está certa.
-      </div>
-
-      <!-- Botões -->
-      <div>
-        <button type="submit" [disabled]="formMotorista.invalid">Guardar Alterações</button>
-        <button type="button" (click)="cancelarFormularioMotorista()">Cancelar</button>
-      </div>
-    </form>
+    <ul class="list">
+      <li *ngFor="let motorista of listaDrivers" class="list-item">
+        {{ motorista.pessoa.nome }} - NIF: {{ motorista.pessoa.nif }}
+        
+        <span class="actions">
+          <button class="edit-btn" (click)="editarMotorista(motorista)">Editar</button>
+          <button class="delete-btn" *ngIf="!motorista.requesitado" (click)="removerMotorista(motorista._id!)">Apagar</button>
+        </span>
+      
+        <!-- Formulário de Edição do Motorista -->
+        <div *ngIf="motoristaAEditar?._id === motorista._id" class="edit-form">
+          <div class="form-row">
+            <label>Nome:</label>
+            <input type="text" [(ngModel)]="motoristaAEditar!.pessoa.nome" name="nome">
+          </div>
+      
+          <div class="form-row">
+            <label>NIF:</label>
+            <input type="text" [(ngModel)]="motoristaAEditar!.pessoa.nif" name="nif">
+          </div>
+      
+          <div class="form-row">
+            <label>Carta de Condução:</label>
+            <input type="text" [(ngModel)]="motoristaAEditar!.carta_de_conducao" name="carta">
+          </div>
+      
+          <div class="form-row">
+            <label>Género:</label>
+            <select [(ngModel)]="motoristaAEditar!.pessoa.genero" name="genero">
+              <option [value]="Genero.Masculino">Masculino</option>
+              <option [value]="Genero.Feminino">Feminino</option>
+            </select>
+          </div>
+      
+          <div class="form-actions">
+            <button (click)="guardarEdicaoMotorista()">Guardar</button>
+            <button (click)="cancelarEdicaoMotorista()">Cancelar</button>
+          </div>
+        </div>
+      </li>
+    </ul>
   </div>
 </div>
-
