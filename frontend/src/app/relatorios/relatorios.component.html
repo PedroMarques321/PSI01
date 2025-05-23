@@ -2,6 +2,48 @@
     <div class="section">
       <h2>Lista de Relatórios</h2>
       
+        <!-- Filtros -->
+    <div class="filters-section">
+        <div class="form-row">
+          <label>Data Início:</label>
+          <input type="date" [(ngModel)]="filtros.dataInicio" (change)="calcularEstatisticas()">
+        </div>
+  
+        <div class="form-row">
+          <label>Data Fim:</label>
+          <input type="date" [(ngModel)]="filtros.dataFim" (change)="calcularEstatisticas()">
+        </div>
+  
+        <div class="form-row">
+          <label>Tipo de Serviço:</label>
+          <select [(ngModel)]="filtros.tipoServico" (change)="calcularEstatisticas()">
+            <option value="">Todos</option>
+            <option value="Normal">Normal</option>
+            <option value="Luxo">Luxo</option>
+          </select>
+        </div>
+      </div>
+  
+      <!-- Estatísticas -->
+      <div class="statistics-section">
+        <div class="stat-card">
+          <h3>Total de Viagens</h3>
+          <p>{{ estatisticas.totalViagens }}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Total de Quilômetros</h3>
+          <p>{{ estatisticas.totalKm.toFixed(2) }} km</p>
+        </div>
+        <div class="stat-card">
+          <h3>Total Faturado</h3>
+          <p>€{{ estatisticas.totalFaturado.toFixed(2) }}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Média por Viagem</h3>
+          <p>€{{ estatisticas.mediaPreco.toFixed(2) }}</p>
+        </div>
+      </div>
+
       <ul class="list">
         <li *ngFor="let relatorio of listaRelatorios" class="list-item">
           <div class="relatorio-info">

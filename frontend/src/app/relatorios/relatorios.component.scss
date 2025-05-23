@@ -102,4 +102,41 @@
         width: 100%;
       }
     }
+
+    .filters-section {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+      }
+      
+      .statistics-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+      
+      .stat-card {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        text-align: center;
+      
+        h3 {
+          color: #666;
+          font-size: 0.9rem;
+          margin-bottom: 10px;
+        }
+      
+        p {
+          color: #333;
+          font-size: 1.5rem;
+          font-weight: bold;
+        }
+      }
   }

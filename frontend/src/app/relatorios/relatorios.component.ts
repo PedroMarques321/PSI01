@@ -63,4 +63,43 @@ export class RelatoriosComponent {
     }));
     console.log(this.listaRelatorios);
   }
+
+  filtros = {
+    dataInicio: '',
+    dataFim: '',
+    tipoServico: '',
+    motoristaID: ''
+  };
+
+  // Campos para estatísticas
+  estatisticas = {
+    totalKm: 0,
+    totalViagens: 0,
+    totalFaturado: 0,
+    mediaPreco: 0
+  };
+
+  calcularEstatisticas() {
+    const relatoriosFiltrados = this.aplicarFiltros();
+    this.estatisticas = {
+      totalKm: relatoriosFiltrados.reduce((sum, r) => sum + r.quilometros, 0),
+      totalViagens: relatoriosFiltrados.length,
+      totalFaturado: relatoriosFiltrados.reduce((sum, r) => sum + r.preco, 0),
+      mediaPreco: relatoriosFiltrados.length ? 
+        relatoriosFiltrados.reduce((sum, r) => sum + r.preco, 0) / relatoriosFiltrados.length : 0
+    };
+  }
+
+  aplicarFiltros(): Relatorio[] {
+    return this.listaRelatorios.filter(r => {
+      const dataRelatorio = new Date(r.data);
+      const dataInicio = this.filtros.dataInicio ? new Date(this.filtros.dataInicio) : null;
+      const dataFim = this.filtros.dataFim ? new Date(this.filtros.dataFim) : null;
+
+      return (!dataInicio || dataRelatorio >= dataInicio) &&
+             (!dataFim || dataRelatorio <= dataFim) &&
+             (!this.filtros.tipoServico || r.tipoServico === this.filtros.tipoServico) &&
+             (!this.filtros.motoristaID || r.motoristaID === this.filtros.motoristaID);
+    });
+  }
 }
