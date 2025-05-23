@@ -43,6 +43,31 @@ export class DriverService {
         catchError(this.handleError<Motorista>('postDriver'))
       );
   }
+
+  /** PUT - Requesitar motorista */
+  requesitarDriver(motorista: Motorista): Observable<Motorista> {
+    console.log("Motorista a requesitar: ", motorista);
+    const url = `http://localhost:3000/dashboard/requesitar-driver/${motorista._id}`;
+
+    console.log('requesitarDriver chamado com:', motorista);
+
+    return this.http.put<Motorista>(url, motorista, this.httpOptions).pipe(
+      tap(updated => console.log('Motorista requesitado:', updated)),
+      catchError(this.handleError<Motorista>('requesitarDriver'))
+    );
+  }
+
+  /** DELETE - Remover motorista pelo ID */
+  removerMotorista(id: string): Observable<any> {
+    const url = `http://localhost:3000/dashboard/driver/remover/${id}`;
+    console.log(`Remover motorista com ID: ${id}`);
+
+    return this.http.delete(url, this.httpOptions).pipe(
+      tap(() => console.log(`Motorista com ID ${id} removido.`)),
+      catchError(this.handleError('removerMotorista'))
+    );
+  }
+
   /** Tratamento de erro */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

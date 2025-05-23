@@ -9,6 +9,7 @@ const driverSchema = new schema({
     carta_de_conducao: { type: String, required: true, maxLength: 20 },
     codigo_postal: { type: String, required: true, maxLength: 20 },
     ano_de_nascimento: { type: Date, required: true },
+    requesitado: { type: Boolean, default: false }
 });
 
 driverSchema.virtual('url').get(function() {

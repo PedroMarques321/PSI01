@@ -7,4 +7,5 @@ export interface Motorista {
   carta_de_conducao: string,
   pessoa: Pessoa,
   nascimento: Date,
+  requesitado: boolean
 }

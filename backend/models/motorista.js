@@ -12,6 +12,7 @@ const motoristaSchema = new schema({
     carta_de_conducao: { type: String, required: true, maxLength: 20 },
     pessoa: pessoaSchema,
     nascimento: { type: Date, required: true },
+    requesitado: { type: Boolean, default: false },
 });
 
 motoristaSchema.virtual('url').get(function() {

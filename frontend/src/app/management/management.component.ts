@@ -74,7 +74,8 @@ export class ManagementComponent {
       nif: '123456789',
       nome: 'João Silva',
       genero: Genero.Masculino
-    }
+    },
+    requesitado : false
   };
 
 
@@ -362,7 +363,8 @@ export class ManagementComponent {
             nif: '0',
             nome: 'nome',
             genero: Genero.Masculino
-          }
+          },
+          requesitado: false
     }
   }
 

@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { TaxisService } from '../taxis.service';
+import { DriverService } from '../driver.service';
 import { Taxi } from '../taxi';
+import { Motorista } from '../motorista';
+import { Pessoa, Genero } from '../pessoa';
+import * as Papa from 'papaparse';
 
 @Component({
   selector: 'app-gestor',
@@ -11,12 +15,20 @@ import { Taxi } from '../taxi';
 export class GestorComponent {
 
   listaTaxis: Taxi[] = [];
+  listaDrivers: Motorista[] = [];
+
+  Genero = Genero;
 
   loading = false;
+  loadingMotoristas = false;
   errorMessage = '';
+  erroMotoristas = '';
   mostrarTaxis = false;
+  mostrarMotoristas = false;
   mostrarEditorTaxi = false;
+  mostrarEditorMotorista = false;
   taxiAEditar: Taxi | null = null;
+  motoristaAEditar: Motorista | null = null;
 
   marcasDisponiveis = ['Toyota', 'Mercedes', 'Volkswagen'];
     todosModelos: { [marca: string]: string[] } = {
@@ -27,12 +39,16 @@ export class GestorComponent {
 
   modelosDisponiveis: string[] = [];
 
+  codigosPostais: any[] = [];
+
   constructor(
-      private taxisService: TaxisService
+      private taxisService: TaxisService,
+      private driverService: DriverService
     ) {}
 
   ngOnInit(): void {
         this.getTaxis();
+        this.getDrivers();
   }
 
   getTaxis(): void {
@@ -51,6 +67,22 @@ export class GestorComponent {
           );
   }
 
+  getDrivers(): void {
+        this.loading = true;
+        this.driverService.getDrivers()
+          .subscribe(
+            (motoristas: Motorista[]) => {
+              console.log('Drivers recebidos:', motoristas);
+              this.listaDrivers = motoristas.reverse();
+              this.loading = false;
+            },
+            (error: any) => {
+              this.errorMessage = 'Erro ao carregar drivers: ' + error.message;
+              this.loading = false;
+            }
+          );
+    }
+
   mostrarLista(): void {
       this.mostrarTaxis = true;
   }
@@ -63,7 +95,6 @@ export class GestorComponent {
   editarTaxi(taxi: Taxi): void {
      this.taxiAEditar = JSON.parse(JSON.stringify(taxi));
      this.mostrarEditorTaxi = true;
-     console.log(this.taxiAEditar!.usado);
   }
 
   validarMatricula(matricula: string): boolean {
@@ -124,5 +155,120 @@ export class GestorComponent {
   atualizarModelos(): void {
       this.modelosDisponiveis = this.todosModelos[this.taxiAEditar!.marca] || [];
       this.taxiAEditar!.modelo = '';
+    }
+
+
+  cancelarFormularioMotorista(): void{
+    this.motoristaAEditar = null;
+    this.mostrarEditorMotorista = false;
+    }
+
+  guardarEdicaoMotorista(): void{
+
+    if (!this.motoristaAEditar || !this.motoristaAEditar._id) return;
+
+        const index = this.listaDrivers.findIndex(t => t._id === this.motoristaAEditar!._id);
+
+        if (index !== -1) {
+          // Remove o táxi antigo da lista
+          this.listaDrivers.splice(index, 1);
+
+          // Insere o táxi atualizado no topo
+          this.listaDrivers.unshift(JSON.parse(JSON.stringify(this.motoristaAEditar)));
+
+          console.log('Motorista atualizado movido para o topo da lista:', this.listaDrivers[0]);
+        } else {
+          console.warn('Motorista com este ID não encontrado na lista.');
+        }
+
+    this.driverService.requesitarDriver(this.motoristaAEditar).subscribe();
+    this.motoristaAEditar = null;
+    this.mostrarEditorMotorista = false;
+    }
+
+  removerMotorista(motorista: Motorista): void{
+    this.driverService.removerMotorista(motorista!._id!).subscribe();
+    this.getDrivers();
+    }
+
+  editarMotorista(motorista: Motorista): void{
+    this.mostrarEditorMotorista = true;
+    this.motoristaAEditar = JSON.parse(JSON.stringify(motorista));
+    }
+
+  mostrarListaMotoristas(): void{
+    this.mostrarMotoristas = true;
+    }
+
+  nifValido(): boolean {
+      const nif = String(this.motoristaAEditar!.pessoa.nif);
+
+      // Verifica se contém apenas dígitos
+      const formatoValido = /^[0-9]{9}$/.test(nif);
+
+      // Verifica se já existe na lista
+      const nifDuplicado = this.listaDrivers.some(driver => String(driver.pessoa.nif) === nif);
+
+      return formatoValido && !nifDuplicado;
+    }
+
+
+    nomeValido(): boolean {
+      // Verifica se contém apenas letras (com espaços permitidos)
+      return /^[A-Za-zÀ-ÿ\s]+$/.test(this.motoristaAEditar!.pessoa.nome);
+    }
+
+    ruaValida(): boolean {
+      const ruaRegex = /^[A-Za-zÀ-ÿ\s]+$/;
+      return ruaRegex.test(this.motoristaAEditar!.morada.rua);
+    }
+
+    portaValida(): boolean {
+      return !isNaN(this.motoristaAEditar!.morada.numero_porta);
+    }
+
+    carregarCodigosPostais() {
+      const filePath = 'assets/codigos_postais.csv';
+
+      Papa.parse(filePath, {
+        download: true,
+        complete: (result : any) => {
+          this.codigosPostais = result.data;
+          console.log('Dados do CSV carregados:', this.codigosPostais);
+        },
+        header: true
+      });
+    }
+
+
+    onCodigoPostalChange() {
+      const codigoPostal = this.motoristaAEditar!.morada.codigo_postal;
+
+      if (codigoPostal.length === 8) {
+        const [numCodPostal, extCodPostal] = codigoPostal.split("-");  // Divide o código postal por espaço.
+        console.log("Código Postal Inserido:", numCodPostal, extCodPostal);  // Verifique se o valor está correto.
+        this.buscarLocalidade(numCodPostal, extCodPostal);  // Chama a função de busca passando ambos os valores
+      } else {
+        this.motoristaAEditar!.morada.localidade = '';
+      }
+    }
+
+    buscarLocalidade(numCodPostal: string, extCodPostal: string) {
+      console.log('Primeiro elemento do array:', this.codigosPostais[0]);
+
+      const num = numCodPostal.trim();
+      const ext = extCodPostal.trim();
+
+      // Encontrar a linha onde num_cod_postal e ext_cod_postal combinam com os valores inseridos.
+      const encontrado = this.codigosPostais.find(codigo =>
+        codigo.num_cod_postal == numCodPostal && codigo.ext_cod_postal == extCodPostal);
+
+      if (encontrado) {
+        this.motoristaAEditar!.morada.localidade = encontrado.nome_localidade;
+      } else {
+        this.motoristaAEditar!.morada.localidade = 'Código postal não encontrado';
+      }
+
+      console.log('Localidade encontrada:', this.motoristaAEditar!.morada.localidade);  // Verifique o valor da localidade.
     }
 }

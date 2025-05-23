@@ -214,6 +214,8 @@ export class MotoristaComponent implements OnInit, OnDestroy {
         motorista: JSON.parse(JSON.stringify(this.turno.motorista)), // cópia profunda
         taxi: JSON.parse(JSON.stringify(this.turno.taxi))            // cópia profunda
       };
+
+        novoTurno.taxi.requesitado = true;
         this.taxisService.requesitarTaxi(novoTurno.taxi).subscribe(
           (res) => {
             console.log('Taxi requesitado com sucesso!', res);
@@ -222,6 +224,17 @@ export class MotoristaComponent implements OnInit, OnDestroy {
             console.error('Erro ao requesitar o taxi:', err);
           }
         );
+
+        novoTurno.motorista.requesitado = true;
+        this.driverService.requesitarDriver(novoTurno.motorista).subscribe(
+          (res) => {
+            console.log('Motorista requesitado com sucesso!', res);
+          },
+          (err) => {
+            console.error('Erro ao requesitar o motorista:', err);
+          }
+        );
+
         this.listaTurnos.push(novoTurno);
         this.listaTurnosMotorista.push(novoTurno);
     }

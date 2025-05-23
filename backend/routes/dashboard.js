@@ -18,6 +18,8 @@ const drivercontroller = require("../controllers/driverController");
 //Driver endpoints
 router.get("/drivers", drivercontroller.driverGetAll);
 router.post("/driver", drivercontroller.driverCreate);
+router.put("/requesitar-driver/:id", drivercontroller.driverUpdate);
+router.delete("/driver/remover/:id", drivercontroller.driverRemover);
 
 const pricecontroller = require("../controllers/priceController");
 
