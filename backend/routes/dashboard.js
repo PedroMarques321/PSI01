@@ -43,7 +43,7 @@ router.put("/viagem/concluir/:id", viagemcontroller.viagemConcluir); // Atualiza
 router.put("/viagem/pendente/:id", viagemcontroller.viagemPendente); // Atualizar viagem existente
 router.get("/viagemNif/:nif", viagemcontroller.viagemGetByClienteId); //Obter viagem pelo nif do criador
 router.put('/:id/atribuirturno', viagemcontroller.atribuirTurno);  // PUT /dashboard/:id/atribuirturno
-
+router.get("/viagensConcluidas", viagemcontroller.getViagensConcluidas); // GET /dashboard/viagensConcluidas
 
 //router.delete("/viagem/:id", viagemcontroller.viagemDelete); // Excluir viagem existente
 

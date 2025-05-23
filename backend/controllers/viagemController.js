@@ -256,6 +256,7 @@ exports.atualizarCoordenadasPartida = asyncHandler(async function (req, res, nex
 
   res.status(200).json({ message: "Coordenadas de partida atualizadas com sucesso", viagem });
 });
+
 exports.atribuirTurno = asyncHandler(async function (req, res) {
     const viagemId = req.params.id;
     const { turnoID } = req.body;
@@ -269,4 +270,14 @@ exports.atribuirTurno = asyncHandler(async function (req, res) {
     await viagem.save();
 
     res.json({ message: "turnoID atribuído com sucesso", viagem });
+});
+
+exports.getViagensConcluidas = asyncHandler(async function(req, res, next) {
+    const viagensConcluidas = await Viagem.find({ estado: 'CONCLUIDO' })
+        .populate('condutorID')
+        .populate('taxiID')
+        .sort({ data: -1 }); // Ordenar por data, mais recente primeiro
+    console.log(viagensConcluidas);
+    res.json(viagensConcluidas);
+
 });

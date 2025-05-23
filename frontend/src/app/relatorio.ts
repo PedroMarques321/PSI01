@@ -1,6 +1,6 @@
 export interface Relatorio {
     _id: string | null;
-    clienteNIF: string;
+    clienteID: string;
     data: Date;
     horaPartida: string;
     horaChegada: string;
