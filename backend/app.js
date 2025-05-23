@@ -14,8 +14,8 @@ var pedidosRouter = require('./routes/pedidos');
 
 var app = express(); 
 
-/*
 const mongoose = require('mongoose');
+/*
 mongoose.connect("mongodb://localhost:27017/webtaxi").then(() => {
   console.log("Ligado à base de dados MongoDB");
 }).catch((err) => {
