@@ -213,6 +213,24 @@ async function createViagens() {
           "PENDENTE" // estado
         );
       }
+
+      await viagemCreate(
+        2, // index
+        3, // sequencia
+        4, // numeroPessoas
+        pessoas[2].nif, // clienteID - usando NIF da primeira pessoa
+        new Date(), // data
+        "14:30", // horaPartida
+        "15:00", // horaChegadaEstimada
+        null, // condutorID - deixando null inicialmente
+        null, // taxiID - deixando null inicialmente
+        10, // quilometros
+        "Rua A, Lisboa", // moradaPartida
+        "Rua B, Lisboa", // moradaChegada
+        15.0, // preco
+        "Normal", // tipoServico
+        "CONCLUIDO" // estado
+      );
       
       console.log("Viagens criadas com sucesso");
     } catch (error) {

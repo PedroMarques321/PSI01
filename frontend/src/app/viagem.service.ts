@@ -103,4 +103,13 @@ export class ViagemService {
     };
   }
 
+  getViagensConcluidas(): Observable<Viagem[]> {
+    const url = `http://localhost:3000/dashboard/viagensConcluidas`;
+    return this.http.get<Viagem[]>(url)
+      .pipe(
+        tap(_ => console.log('Viagens concluidas: ')),
+        catchError(this.handleError<Viagem[]>('getViagensConcluidas', []))
+      );
+  }
+
 }

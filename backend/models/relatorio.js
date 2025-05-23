@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const relatorioSchema = new schema({
-    _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
-    clienteNIF: { type: String, required: true },
+    _id: { type: mongoose.Schema.Types.ObjectId, auto: false },
+    clienteID: { type: String, required: true },
     data: { type: Date, required: true },
     horaPartida: { type: String, required: true },
     horaChegada: { type: String, required: true },

@@ -4,7 +4,7 @@
 
         <ul class="list">
             <li *ngFor="let relatorio of listaRelatorios" class="list-item">
-                <!-- {{ relatorio._id }} - {{ relatorio.taxi.matricula }} {{ relatorio.motorista.pessoa.nome }} {{ relatorio.motorista.pessoa.nif }} {{ relatorio.viagem.partida }} {{ relatorio.viagem.chegada }}-->
+                {{ relatorio._id }} - {{ relatorio.taxiID }} {{ relatorio.motoristaID }} {{ relatorio.moradaPartida }} {{ relatorio.moradaChegada }}
             </li>
         </ul>
     </div>
