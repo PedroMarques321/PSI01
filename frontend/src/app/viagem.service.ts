@@ -9,8 +9,10 @@ import { Viagem, EstadoPedido } from './viagem';
 })
 export class ViagemService {
 
-  private viagensUrl = 'http://localhost:3000/dashboard/viagens';
-  private viagemUrl = 'http://localhost:3000/dashboard/viagem';
+  //private viagensUrl = 'http://localhost:3001/dashboard/viagens';
+  private viagensUrl = 'http://appserver.alunos.di.fc.ul.pt:3001/dashboard/viagens';
+  //private viagemUrl = 'http://localhost:3001/dashboard/viagem';
+  private viagemUrl = 'http://appserver.alunos.di.fc.ul.pt:3001/dashboard/viagem';
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
@@ -54,13 +56,15 @@ export class ViagemService {
   }
   //Get viagem pelo nif do cliente que fez o pedido
   getViagemByNif(nif: string): Observable<Viagem> {
-    const url = `http://localhost:3000/dashboard/viagemNif/${nif}`;
+    //const url = `http://localhost:3001/dashboard/viagemNif/${nif}`;
+    const url = `http://appserver.alunos.di.fc.ul.pt:3001/dashboard/viagemNif/${nif}`;
     return this.http.get<Viagem>(url)
       .pipe(catchError(this.handleError<Viagem>('getViagemByNif')));
   }
 
   cancelarViagem(id: string): Observable<Viagem> {
-    const url = `http://localhost:3000/dashboard/viagem/cancelar/${id}`;
+    //const url = `http://localhost:3001/dashboard/viagem/cancelar/${id}`;
+    const url = `http://appserver.alunos.di.fc.ul.pt:3001/dashboard/viagem/cancelar/${id}`;
     return this.http.put<Viagem>(url, null, this.httpOptions).pipe(
       tap(cancelada => {
         console.log('Viagem cancelada:', cancelada);
@@ -70,7 +74,8 @@ export class ViagemService {
   }
 
   aceitarViagem(viagemId: string, motoristaId: string, taxiId: string, distCM: number, quilometros: number): Observable<Viagem> {
-    const url = `http://localhost:3000/dashboard/viagem/aceitar/${viagemId}/${motoristaId}/${taxiId}/${distCM}/${quilometros}`;
+    //const url = `http://localhost:3001/dashboard/viagem/aceitar/${viagemId}/${motoristaId}/${taxiId}/${distCM}/${quilometros}`;
+    const url = `http://appserver.alunos.di.fc.ul.pt:3001/dashboard/viagem/aceitar/${viagemId}/${motoristaId}/${taxiId}/${distCM}/${quilometros}`;
 
     return this.http.put<Viagem>(url, this.httpOptions)
       .pipe(
@@ -82,7 +87,8 @@ export class ViagemService {
   }
 
   rejeitarViagem(viagem: Viagem): Observable<Viagem> {
-    const url = `http://localhost:3000/dashboard/viagem/rejeitar/${viagem._id}`;
+    //const url = `http://localhost:3001/dashboard/viagem/rejeitar/${viagem._id}`;
+    const url = `http://appserver.alunos.di.fc.ul.pt:3001/dashboard/viagem/rejeitar/${viagem._id}`;
 
     return this.http.put<Viagem>(url, {}, this.httpOptions)
     .pipe(

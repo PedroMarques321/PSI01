@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const Taxi = require("./models/taxi"); // Modelo de Taxi
 
-// Conectar ao MongoDB (certifique-se de ter configurado a conexão)
-mongoose.connect("mongodb://localhost:27017/webtaxi", {
+// Conectar ao MongoDB pela appServer
+
+mongoose.connect("mongodb://psi001:psi001@localhost:27017/psi001?retryWrites=true&authSource=psi001",{
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -13,6 +14,19 @@ mongoose.connect("mongodb://localhost:27017/webtaxi", {
   console.error("Erro ao conectar ao MongoDB:", err);
 });
 
+// Conectar ao MongoDB 
+/*
+mongoose.connect("mongodb://localhost:27017/webtaxi", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  console.log("Conexão bem-sucedida ao MongoDB.");
+})
+.catch((err) => {
+  console.error("Erro ao conectar ao MongoDB:", err);
+});
+*/
 // Dados de exemplo de taxis para popular a base de dados
 const taxis = [
   {

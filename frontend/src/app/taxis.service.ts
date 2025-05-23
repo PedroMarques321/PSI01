@@ -9,9 +9,12 @@ import { Taxi } from './taxi';
 })
 export class TaxisService {
 
-  private allTaxisUrl = 'http://localhost:3000/dashboard/taxis';
-  private postTaxiUrl = 'http://localhost:3000/dashboard/taxi';
-  private putTaxiUrl = 'http://localhost:3000/dashboard/requesitar-taxi';
+  //private allTaxisUrl = 'http://localhost:3001/dashboard/taxis';
+  private allTaxisUrl = 'http://appserver.alunos.di.fc.ul.pt:3001/dashboard/taxis';
+  //private postTaxiUrl = 'http://localhost:3001/dashboard/taxi';
+  private postTaxiUrl = 'http://appserver.alunos.di.fc.ul.pt:3001/dashboard/taxi';
+  //private putTaxiUrl = 'http://localhost:3001/dashboard/requesitar-taxi';
+  private putTaxiUrl = 'http://appserver.alunos.di.fc.ul.pt:3001/dashboard/requesitar-taxi';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -59,7 +62,8 @@ export class TaxisService {
     }
 
   usarTaxi(taxiID: string): Observable<Taxi> {
-    const url = `http://localhost:3000/dashboard/taxi/usar/${taxiID}`;
+    //const url = `http://localhost:3001/dashboard/taxi/usar/${taxiID}`;
+    const url = `http://appserver.alunos.di.fc.ul.pt:3001/dashboard/taxi/usar/${taxiID}`;
     console.log('usarTaxi called - URL:', url);
 
     return this.http.put<Taxi>(url, {}, this.httpOptions).pipe(
@@ -71,7 +75,8 @@ export class TaxisService {
   }
 
   removerTaxi(id: string): Observable<any> {
-    const url = `http://localhost:3000/dashboard/taxi/remover/${id}`;
+    //const url = `http://localhost:3001/dashboard/taxi/remover/${id}`;
+    const url = `http://appserver.alunos.di.fc.ul.pt:3001/dashboard/taxi/remover/${id}`;
     console.log('removerTaxi called - URL:', url);
 
     return this.http.delete(url, this.httpOptions).pipe(
@@ -83,7 +88,8 @@ export class TaxisService {
   }
 
   updateTaxi(taxi: Taxi): Observable<Taxi> {
-    const url = `http://localhost:3000/dashboard/taxi/update/${taxi._id}`;
+    //const url = `http://localhost:3001/dashboard/taxi/update/${taxi._id}`;
+    const url = `http://appserver.alunos.di.fc.ul.pt:3001/dashboard/taxi/update/${taxi._id}`;
     console.log('updateTaxi called:', taxi);
 
     return this.http.put<Taxi>(url, taxi, this.httpOptions).pipe(
