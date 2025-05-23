@@ -10,10 +10,8 @@ import { Turno } from './turno'; // Modelo de Turno
 export class TurnosService {
 
   // URL para o backend (ajuste conforme necessário)
-  //private allTurnosUrl = 'http://localhost:3001/dashboard/turnos';
-  private allTurnosUrl = 'http://appserver.alunos.di.fc.ul.pt:3001/dashboard/turnos';
-  //private postTurnoUrl = 'http://localhost:3001/dashboard/turno';
-  private postTurnoUrl = 'http://appserver.alunos.di.fc.ul.pt:3001/dashboard/turno';
+  private allTurnosUrl = 'http://localhost:3000/dashboard/turnos';
+  private postTurnoUrl = 'http://localhost:3000/dashboard/turno';
 
   // Configuração de headers para enviar e receber JSON
   httpOptions = {

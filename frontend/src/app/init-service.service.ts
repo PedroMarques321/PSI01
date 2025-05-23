@@ -8,8 +8,7 @@ import { catchError, tap } from 'rxjs/operators';
 })
 export class InitServiceService {
 
-  //private initUrl = 'http://localhost:3001/init';
-  private initUrl = 'http://appserver.alunos.di.fc.ul.pt:3001/init';
+  private initUrl = 'http://localhost:3000/init';
 
   constructor(private http: HttpClient) { }
 
