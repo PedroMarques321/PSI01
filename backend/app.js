@@ -24,7 +24,7 @@ mongoose.connect("mongodb://localhost:27017/webtaxi").then(() => {
 */
 // Conexão com o MongoDB AppServer
 
-mongoose.connect("mongodb://PSI001:PSI001@localhost:27017/PSI001?retryWrites=true&authSource=PSI001/webtaxi").then(() => {
+mongoose.connect("mongodb://PSI001:PSI001@localhost:27017/PSI001?retryWrites=true&authSource=PSI001").then(() => {
   console.log("Ligado à base de dados MongoDB");
 }).catch((err) => {
     console.error("Erro na ligação à base de dados:", err);
