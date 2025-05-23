@@ -18,6 +18,13 @@ export class RelatoriosComponent {
   listaViagensConcluidas: Viagem[] = [];
   listaRelatorios: Relatorio[] = [];
   relatorioExpandido: string | null = null;
+  condutorExpandido: string | null = null;
+  taxiExpandido: string | null = null;
+  
+  // Mapas para armazenar os detalhes
+  condutoresMap: Map<string, Motorista> = new Map();
+  taxisMap: Map<string, Taxi> = new Map();
+
   constructor(
     private driverService: DriverService,
     private taxiService: TaxisService,
@@ -33,11 +40,48 @@ export class RelatoriosComponent {
     this.relatorioExpandido = this.relatorioExpandido === relatorioID ? null : relatorioID;
   }
 
+  toggleCondutorDetalhes(condutorId: string) {
+    this.condutorExpandido = this.condutorExpandido === condutorId ? null : condutorId;
+  }
+
+  toggleTaxiDetalhes(taxiId: string) {
+    this.taxiExpandido = this.taxiExpandido === taxiId ? null : taxiId;
+  }
+
+  buscarDetalhesCondutorETaxi(relatorios: Relatorio[]) {
+    // Buscar todos os motoristas
+    this.driverService.getDrivers().subscribe({
+      next: (motoristas) => {
+        relatorios.forEach(relatorio => {
+          const motorista = motoristas.find(m => m._id === relatorio.motoristaID);
+          if (motorista) {
+            this.condutoresMap.set(relatorio.motoristaID, motorista);
+          }
+        });
+      },
+      error: (erro) => console.error('Erro ao buscar motoristas:', erro)
+    });
+  
+    // Buscar todos os táxis
+    this.taxiService.getTaxis().subscribe({
+      next: (taxis) => {
+        relatorios.forEach(relatorio => {
+          const taxi = taxis.find(t => t._id === relatorio.taxiID);
+          if (taxi) {
+            this.taxisMap.set(relatorio.taxiID, taxi);
+          }
+        });
+      },
+      error: (erro) => console.error('Erro ao buscar táxis:', erro)
+    });
+  }
+
   carregarViagensConcluidas() {
     this.viagemService.getViagensConcluidas().subscribe({
       next: (viagens) => {
         this.listaViagensConcluidas = viagens;
         this.converterParaRelatorios();
+        this.buscarDetalhesCondutorETaxi(this.listaRelatorios);
       },
       error: (erro) => {
         console.error('Erro ao carregar viagens concluídas:', erro);
@@ -61,6 +105,7 @@ export class RelatoriosComponent {
       tipoServico: viagem.tipoServico,
       estado: 'CONCLUIDO'
     }));
+    this.buscarDetalhesCondutorETaxi(this.listaRelatorios);
     console.log(this.listaRelatorios);
   }
 

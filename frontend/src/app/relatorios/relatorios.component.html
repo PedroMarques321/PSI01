@@ -2,8 +2,8 @@
     <div class="section">
       <h2>Lista de Relatórios</h2>
       
-        <!-- Filtros -->
-    <div class="filters-section">
+      <!-- Filtros -->
+      <div class="filters-section">
         <div class="form-row">
           <label>Data Início:</label>
           <input type="date" [(ngModel)]="filtros.dataInicio" (change)="calcularEstatisticas()">
@@ -43,7 +43,7 @@
           <p>€{{ estatisticas.mediaPreco.toFixed(2) }}</p>
         </div>
       </div>
-
+  
       <ul class="list">
         <li *ngFor="let relatorio of listaRelatorios" class="list-item">
           <div class="relatorio-info">
@@ -72,13 +72,35 @@
             </div>
   
             <div class="form-row">
-              <label>Motorista ID:</label>
-              <span>{{ relatorio.motoristaID }}</span>
+              <label>Motorista:</label>
+              <div class="details-container">
+                <span>{{ condutoresMap.get(relatorio.motoristaID)?.pessoa?.nome || 'Carregando...' }}</span>
+                <button class="toggle-btn" (click)="toggleCondutorDetalhes(relatorio.motoristaID)">
+                  {{ condutorExpandido === relatorio.motoristaID ? 'Ocultar' : 'Ver Detalhes' }}
+                </button>
+                
+                <div *ngIf="condutorExpandido === relatorio.motoristaID" class="nested-details">
+                  <p><strong>NIF:</strong> {{ condutoresMap.get(relatorio.motoristaID)?.pessoa?.nif }}</p>
+                  <p><strong>Nome:</strong> {{ condutoresMap.get(relatorio.motoristaID)?.pessoa?.nome }}</p>
+                  <p><strong>Carta de Condução:</strong> {{ condutoresMap.get(relatorio.motoristaID)?.carta_de_conducao }}</p>
+                </div>
+              </div>
             </div>
   
             <div class="form-row">
-              <label>Taxi ID:</label>
-              <span>{{ relatorio.taxiID }}</span>
+              <label>Táxi:</label>
+              <div class="details-container">
+                <span>{{ taxisMap.get(relatorio.taxiID)?.marca }} {{ taxisMap.get(relatorio.taxiID)?.modelo }}</span>
+                <button class="toggle-btn" (click)="toggleTaxiDetalhes(relatorio.taxiID)">
+                  {{ taxiExpandido === relatorio.taxiID ? 'Ocultar' : 'Ver Detalhes' }}
+                </button>
+                
+                <div *ngIf="taxiExpandido === relatorio.taxiID" class="nested-details">
+                  <p><strong>Matrícula:</strong> {{ taxisMap.get(relatorio.taxiID)?.matricula }}</p>
+                  <p><strong>Conforto:</strong> {{ taxisMap.get(relatorio.taxiID)?.conforto }}</p>
+                  <p><strong>Lugares:</strong> {{ taxisMap.get(relatorio.taxiID)?.lugares }}</p>
+                </div>
+              </div>
             </div>
   
             <div class="form-row">
