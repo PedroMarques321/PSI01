@@ -222,8 +222,26 @@ async function createViagens() {
         new Date(), // data
         "14:30", // horaPartida
         "15:00", // horaChegadaEstimada
-        null, // condutorID - deixando null inicialmente
-        null, // taxiID - deixando null inicialmente
+        "6830e99c70f8aa1cc5fa95c3", // condutorID - deixando null inicialmente
+        "6830e99c70f8aa1cc5fa95af", // taxiID - deixando null inicialmente
+        10, // quilometros
+        "Rua A, Lisboa", // moradaPartida
+        "Rua B, Lisboa", // moradaChegada
+        15.0, // preco
+        "Normal", // tipoServico
+        "CONCLUIDO" // estado
+      );
+
+      await viagemCreate(
+        3, // index
+        4, // sequencia
+        2, // numeroPessoas
+        pessoas[2].nif, // clienteID - usando NIF da primeira pessoa
+        new Date(), // data
+        "16:30", // horaPartida
+        "17:00", // horaChegadaEstimada
+        "6830e99c70f8aa1cc5fa95c3", // condutorID - deixando null inicialmente
+        "6830e99c70f8aa1cc5fa95af", // taxiID - deixando null inicialmente
         10, // quilometros
         "Rua A, Lisboa", // moradaPartida
         "Rua B, Lisboa", // moradaChegada

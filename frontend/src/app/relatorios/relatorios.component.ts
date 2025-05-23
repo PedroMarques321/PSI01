@@ -17,7 +17,7 @@ export class RelatoriosComponent {
 
   listaViagensConcluidas: Viagem[] = [];
   listaRelatorios: Relatorio[] = [];
-
+  relatorioExpandido: string | null = null;
   constructor(
     private driverService: DriverService,
     private taxiService: TaxisService,
@@ -27,6 +27,10 @@ export class RelatoriosComponent {
   ngOnInit() {
     this.carregarViagensConcluidas();
     console.log(this.listaViagensConcluidas);
+  }
+
+  toggleDetalhes(relatorioID: string | null) {
+    this.relatorioExpandido = this.relatorioExpandido === relatorioID ? null : relatorioID;
   }
 
   carregarViagensConcluidas() {
