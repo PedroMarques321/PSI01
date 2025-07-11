@@ -1,7 +1,8 @@
- ____  ___  ____    ___   __    _  ___   ___ 
-(  _ \/ __)(_  _)  (__ \ /. |  / )(__ \ | __)
- )___/\__ \ _)(_    / _/(_  _)/ /  / _/ |__ \
-(__)  (___/(____)  (____) (_)(_/  (____)(___/
+Taxi branch website, project developed in university
+
+HOW TO RUN
+1. To run the backend of this project open a terminal in folder /backend and run the command npm start.
+3. To run the frontend open a terminal in folder /frontend and run ng serve --open
 
 Grupo:
 Pedro Marques n48674
