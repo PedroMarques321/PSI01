@@ -7,7 +7,7 @@ Frontend developed with Angular Framework,Backend developed with NodeJS, MongoDB
 2. To run the frontend open a terminal in folder /frontend and run ng serve --open
 
 ## Database
-Whenever the backend is ran, a script runs deleting every entry in the MongoDB cluster and recreates all entries.
+Whenever the backend is ran, to fill the database you need to make a GET API request to "http://localhost:3001/init", a script runs deleting every entry in the MongoDB cluster and recreates all entries.
 You need to first create a MongoDB cluster, put your connection string with your cluster password, only then you can run the backend.
 It is possible to run in localhost, however it is preferable to run with the online cluster.
 
