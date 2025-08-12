@@ -10,12 +10,11 @@ const Viagem = require("../models/viagem");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 
-//const mongoDB = "mongodb+srv://pedromarques2881997:dSjSww1uXxE6sbJP@cluster0.tj7cu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"  
-//const mongoDB = "mongodb+srv://diogo:psi01@cluster0.sacvmdg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+// Change your MongoDB connection string here
+// This is just an example, you should use your own connection string
+// It still works locally, however it is best to use the online cluster
 const mongoDB = "mongodb://psi001:psi001@localhost:27017/psi001?retryWrites=true&authSource=psi001";
-  // We pass the index to the ...Create functions so that, for example,
-  // genre[0] will always be the Fantasy genre, regardless of the order
-  // in which the elements of promise.all's argument complete.
+
 
 
 router.get('/', async (req, res) => {
